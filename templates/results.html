@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Quiz Results | StudyFree AI</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at top left,
+                    #16213e 0%,
+                    #080d16 45%,
+                    #0b1020 100%
+                );
+
+            color: #f8fafc;
+
+            padding: 40px 20px;
+        }
+
+
+        .results-container {
+
+            width: 100%;
+
+            max-width: 1050px;
+
+            margin: 0 auto;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+
+        .trophy {
+
+            font-size: 64px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .header h1 {
+
+            margin: 0;
+
+            font-size: 42px;
+
+            font-weight: 800;
+        }
+
+
+        .header p {
+
+            margin-top: 10px;
+
+            color: #94a3b8;
+
+            font-size: 18px;
+        }
+
+
+        /* =========================
+           SCORE CARD
+        ========================= */
+
+        .score-card {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #111c2d,
+                    #0c1420
+                );
+
+            border: 1px solid #26364d;
+
+            border-radius: 24px;
+
+            padding: 40px;
+
+            text-align: center;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,.35);
+
+            margin-bottom: 25px;
+        }
+
+
+        .score {
+
+            font-size: 64px;
+
+            font-weight: 800;
+
+            margin: 5px 0;
+        }
+
+
+        .score span {
+
+            color: #60a5fa;
+        }
+
+
+        .percentage {
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+            color: #22c55e;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           PROGRESS
+        ========================= */
+
+        .progress-container {
+
+            width: 100%;
+
+            max-width: 650px;
+
+            height: 14px;
+
+            margin: 0 auto;
+
+            background: #1e293b;
+
+            border-radius: 100px;
+
+            overflow: hidden;
+        }
+
+
+        .progress-bar {
+
+            height: 100%;
+
+            width: {{ percentage }}%;
+
+            border-radius: 100px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #22c55e,
+                    #3b82f6
+                );
+        }
+
+
+       
+
+       
+
+        /* =========================
+        STAT GRID
+        ========================= */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+        STAT CARD
+        ========================= */
+
+        .stat {
+
+            background: #101925;
+
+            border: 1px solid #26364d;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            text-align: center;
+        }
+
+
+        /* =========================
+        STAT ICON
+        ========================= */
+
+        .stat-icon {
+
+            font-size: 34px;
+
+            margin-bottom: 8px;
+        }
+
+
+        /* =========================
+        STAT TITLE
+        ========================= */
+
+        .stat h3 {
+
+            margin: 5px 0;
+
+            color: #94a3b8;
+
+            font-size: 15px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =========================
+        STAT NUMBER
+        ========================= */
+
+        .stat-number {
+
+            font-size: 32px;
+
+            font-weight: 800;
+
+            margin-top: 8px;
+        }
+
+
+        /* =========================
+           PERFORMANCE
+        ========================= */
+
+        .performance {
+
+            text-align: center;
+
+            padding: 22px;
+
+            background: #111c2d;
+
+            border: 1px solid #26364d;
+
+            border-radius: 18px;
+
+            font-size: 20px;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+        }
+
+
+        /* =========================
+           RECOMMENDATION
+        ========================= */
+
+        .recommendation {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #101d31,
+                    #0d1726
+                );
+
+            border: 1px solid #2563eb;
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .recommendation-title {
+
+            color: #60a5fa;
+
+            font-size: 20px;
+
+            font-weight: 800;
+
+            margin-bottom: 10px;
+        }
+
+
+        .recommendation p {
+
+            margin: 0;
+
+            color: #cbd5e1;
+
+            line-height: 1.7;
+
+            font-size: 16px;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .actions {
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .btn {
+
+            display: inline-block;
+
+            padding: 15px 25px;
+
+            border-radius: 12px;
+
+            text-decoration: none;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            border: 0;
+
+            cursor: pointer;
+
+            transition:
+                transform .2s ease,
+                box-shadow .2s ease;
+        }
+
+
+        .btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(0,0,0,.3);
+        }
+
+
+        .btn-primary {
+
+            background: #22c55e;
+
+            color: white;
+        }
+
+
+        .btn-secondary {
+
+            background: #2563eb;
+
+            color: white;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 35px;
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            body {
+
+                padding: 25px 15px;
+            }
+
+
+            .header h1 {
+
+                font-size: 32px;
+            }
+
+
+            .score {
+
+                font-size: 50px;
+            }
+
+
+            .stats {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .score-card {
+
+                padding: 30px 20px;
+            }
+
+        }
+
+
+        @media (max-width: 420px) {
+
+            .stats {
+
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="results-container">
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <div class="header">
+
+        <div class="trophy">
+            🏆
+        </div>
+
+        <h1>
+            Quiz Completed!
+        </h1>
+
+        <p>
+            Great work! Here's your performance.
+        </p>
+
+    </div>
+
+
+
+    <!-- =========================
+         SCORE
+    ========================== -->
+
+    <div class="score-card">
+
+        <div class="score">
+
+            <span>
+                {{ score }}
+            </span>
+
+            /
+            {{ max_score }}
+
+        </div>
+
+
+        <div class="percentage">
+
+            {{ percentage }}%
+
+        </div>
+
+
+        <div class="progress-container">
+
+            <div
+                class="progress-bar"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+
+    
+
+    
+
+    <!-- =========================
+        STATISTICS
+    ========================== -->
+
+    <div class="stats">
+
+
+        <!-- CORRECT -->
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                ✅
+            </div>
+
+            <h3>
+                Correct
+            </h3>
+
+            <div class="stat-number">
+                {{ correct }}
+            </div>
+
+        </div>
+
+
+        <!-- PARTIAL -->
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                🟡
+            </div>
+
+            <h3>
+                Partial
+            </h3>
+
+            <div class="stat-number">
+                {{ partial }}
+            </div>
+
+        </div>
+
+
+        <!-- INCORRECT -->
+
+        <div class="stat">
+
+            <div class="stat-icon">
+                ❌
+            </div>
+
+            <h3>
+                Incorrect
+            </h3>
+
+            <div class="stat-number">
+                {{ incorrect }}
+            </div>
+
+        </div>
+
+
+        
+
+
+    </div>
+
+
+    <!-- =========================
+         AI RECOMMENDATION
+    ========================== -->
+
+    <div class="recommendation">
+
+        <div class="recommendation-title">
+
+            🧠 AI Recommendation
+
+        </div>
+
+
+        {% if percentage >= 90 %}
+
+            <p>
+                Excellent work! You have demonstrated
+                strong understanding of this lesson.
+                Try a more challenging quiz next.
+            </p>
+
+        {% elif percentage >= 75 %}
+
+            <p>
+                Great job! Review your incorrect answers
+                and take another quiz to strengthen your
+                understanding.
+            </p>
+
+        {% elif percentage >= 50 %}
+
+            <p>
+                You're making progress. Review the lesson,
+                focus on the questions you missed, and try
+                another quiz.
+            </p>
+
+        {% else %}
+
+            <p>
+                Start by revising the lesson carefully,
+                then take another quiz. Consistent practice
+                will improve your score.
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+
+    <!-- =========================
+         ACTIONS
+    ========================== -->
+
+    <div class="actions">
+
+
+        <a
+            href="/download-report"
+            class="btn btn-secondary"
+        >
+            📄 Download AI Report
+        </a>
+
+
+        <a
+            href="/ai-quiz"
+            class="btn btn-primary"
+        >
+            🚀 Start New Quiz
+        </a>
+
+    </div>
+
+
+
+    <div class="footer">
+
+        Powered by StudyFree AI
+        • Learn Smarter • Faster • Better
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+<!-- =========================================================
+     RESULTS CONFETTI / PAPER BLAST
+========================================================= -->
+
+<canvas id="confettiCanvas"></canvas>
+
+<style>
+
+#confettiCanvas {
+
+    position: fixed;
+
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    pointer-events: none;
+
+    z-index: 99999;
+}
+
+</style>
+
+
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const canvas =
+            document.getElementById(
+                "confettiCanvas"
+            );
+
+        if (!canvas) {
+            return;
+        }
+
+
+        const ctx =
+            canvas.getContext("2d");
+
+
+        let pieces = [];
+
+        let animationRunning = false;
+
+
+        function resizeCanvas() {
+
+            canvas.width =
+                window.innerWidth;
+
+            canvas.height =
+                window.innerHeight;
+        }
+
+
+        resizeCanvas();
+
+
+        window.addEventListener(
+            "resize",
+            resizeCanvas
+        );
+
+
+        /*
+         * ==========================================
+         * CREATE ONE PAPER
+         * ==========================================
+         */
+
+        function createPiece(
+            x,
+            y,
+            direction
+        ) {
+
+            /*
+            * Wider spread angle
+            */
+            const angle =
+                0.20 +
+                Math.random() * 0.65;
+
+
+            /*
+            * Faster so papers can cross
+            * a large portion of the screen.
+            */
+            const speed =
+                8 +
+                Math.random() * 4;
+
+
+            return {
+
+                x: x,
+
+                y:
+                    y +
+                    (
+                        Math.random() * 30
+                    ) - 15,
+
+
+                /*
+                * Horizontal movement
+                */
+                vx:
+                    direction *
+                    Math.cos(angle) *
+                    speed,
+
+
+                /*
+                * Upward movement
+                */
+                vy:
+                    -Math.sin(angle) *
+                    speed,
+
+
+                /*
+                * Small papers
+                */
+                width:
+                    4 +
+                    Math.random() * 4,
+
+                height:
+                    6 +
+                    Math.random() * 6,
+
+
+                rotation:
+                    Math.random() *
+                    Math.PI * 2,
+
+
+                rotationSpeed:
+                    (
+                        Math.random() -
+                        0.5
+                    ) * 0.35,
+
+
+                /*
+                * Gentle gravity
+                */
+                gravity:
+                    0.20 +
+                    Math.random() * 0.08,
+
+
+                /*
+                * MUCH LONGER LIFE
+                *
+                * This is what allows them
+                * to travel across the page.
+                */
+                life:
+                    110 +
+                    Math.random() * 40,
+
+
+                color:
+                    [
+                        "#ff4f81",
+                        "#58a6ff",
+                        "#22c55e",
+                        "#facc15",
+                        "#a855f7",
+                        "#fb923c"
+                    ][
+                        Math.floor(
+                            Math.random() * 6
+                        )
+                    ]
+
+            };
+        }
+
+        
+
+
+        /*
+         * ==========================================
+         * PAPER BLAST
+         * ==========================================
+         */
+
+        function blast() {
+
+            pieces = [];
+
+
+            /*
+            * Start near the bottom corners.
+            */
+
+            const blastY =
+                canvas.height * 0.78;
+
+
+            /*
+            * LEFT SIDE
+            */
+
+            for (
+                let i = 0;
+                i < 35;
+                i++
+            ) {
+
+                pieces.push(
+                    createPiece(
+                        -10,
+                        blastY +
+                        (
+                            Math.random() * 30
+                        ),
+                        1
+                    )
+                );
+
+            }
+
+
+            /*
+            * RIGHT SIDE
+            */
+
+            for (
+                let i = 0;
+                i < 35;
+                i++
+            ) {
+
+                pieces.push(
+                    createPiece(
+                        canvas.width + 10,
+                        blastY +
+                        (
+                            Math.random() * 30
+                        ),
+                        -1
+                    )
+                );
+
+            }
+
+
+            animate();
+        }
+
+
+        /*
+         * ==========================================
+         * ANIMATION
+         * ==========================================
+         */
+
+        function animate() {
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            let alive = false;
+
+
+            for (
+                let i = 0;
+                i < pieces.length;
+                i++
+            ) {
+
+                const piece =
+                    pieces[i];
+
+
+                /*
+                 * Movement
+                 */
+
+                piece.x +=
+                    piece.vx;
+
+                piece.y +=
+                    piece.vy;
+
+
+                /*
+                 * Gravity
+                 */
+
+                piece.vy +=
+                    piece.gravity;
+
+
+                /*
+                 * Rotation
+                 */
+
+                piece.rotation +=
+                    piece.rotationSpeed;
+
+
+                /*
+                 * Lifetime
+                 */
+
+                piece.life -= 1;
+
+
+                if (
+                    piece.life > 0 &&
+                    piece.y <
+                        canvas.height + 30
+                ) {
+
+                    alive = true;
+
+                }
+
+
+                /*
+                 * Draw
+                 */
+
+                ctx.save();
+
+
+                ctx.translate(
+                    piece.x,
+                    piece.y
+                );
+
+
+                ctx.rotate(
+                    piece.rotation
+                );
+
+
+                ctx.fillStyle =
+                    piece.color;
+
+
+                ctx.fillRect(
+                    -piece.width / 2,
+                    -piece.height / 2,
+                    piece.width,
+                    piece.height
+                );
+
+
+                ctx.restore();
+
+            }
+
+
+            if (alive) {
+
+                requestAnimationFrame(
+                    animate
+                );
+
+            } else {
+
+                animationRunning =
+                    false;
+
+
+                ctx.clearRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+            }
+
+        }
+
+
+        /*
+         * ==========================================
+         * FIRST BLAST
+         * ==========================================
+         */
+
+        setTimeout(
+            function () {
+
+                blast();
+
+            },
+            700
+        );
+
+
+        /*
+         * ==========================================
+         * SECOND BLAST
+         *
+         * Your video shows another small
+         * burst later as well.
+         * ==========================================
+         */
+
+        setTimeout(
+            function () {
+
+                blast();
+
+            },
+            3800
+        );
+
+    }
+);
+
+</script>

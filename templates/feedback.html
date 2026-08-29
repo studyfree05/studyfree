@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>StudyFree AI | Feedback</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}">
+
+<style>
+
+body{
+    font-family:'Inter',sans-serif;
+}
+
+.feedback-card{
+
+    max-width:1050px;
+
+    margin:40px auto;
+
+    background:#161b22;
+
+    border:1px solid #30363d;
+
+    border-radius:24px;
+
+    padding:40px;
+
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
+
+}
+
+.header{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+.header h1{
+
+    font-size:44px;
+
+    font-weight:800;
+
+}
+
+.score{
+
+    font-size:52px;
+
+    font-weight:800;
+
+    color:#58a6ff;
+
+    margin-top:15px;
+
+}
+
+.correct{
+    color:#3fb950;
+}
+
+.partial{
+    color:#f59e0b;
+}
+
+.incorrect{
+    color:#f85149;
+}
+
+.skipped{
+    color:#58a6ff;
+}
+
+.info-card{
+
+    margin-top:25px;
+
+    background:#0d1117;
+
+    border:1px solid #30363d;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    transition:.3s;
+
+}
+
+.info-card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 10px 25px rgba(88,166,255,.12);
+
+}
+
+.info-card h3{
+
+    color:#58a6ff;
+
+    margin-bottom:15px;
+
+    font-size:22px;
+
+}
+
+.info-card p{
+
+    color:#c9d1d9;
+
+    line-height:1.8;
+
+    font-size:17px;
+
+}
+
+.next-btn{
+
+    width:100%;
+
+    margin-top:35px;
+
+    background:#238636;
+
+    color:white;
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:16px;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    transition:.3s;
+
+}
+
+.next-btn:hover{
+
+    background:#2ea043;
+
+    transform:translateY(-3px);
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="feedback-card">
+
+<div class="header">
+
+{% if result.grade=="CORRECT" %}
+<h1 class="correct">✅ Correct</h1>
+
+{% elif result.grade=="PARTIAL" %}
+<h1 class="partial">🟡 Partially Correct</h1>
+
+{% elif result.grade=="SKIPPED" %}
+<h1 class="skipped">⏭️ Skipped</h1>
+
+{% else %}
+<h1 class="incorrect">❌ Incorrect</h1>
+{% endif %}
+
+<div class="score">
+
+⭐ {{ result.score }}/10
+
+</div>
+
+</div>
+
+<div class="info-card">
+<h3>📝 Why this Score?</h3>
+<p>{{ result.feedback }}</p>
+</div>
+
+<div class="info-card">
+<h3>📖 Correct Answer</h3>
+<p>{{ result.correct_answer }}</p>
+</div>
+
+<div class="info-card">
+<h3>🎓 Topic Explanation</h3>
+<p>{{ result.topic_explanation }}</p>
+</div>
+
+<div class="info-card">
+<h3>📚 Additional Information</h3>
+<p>{{ result.additional_information }}</p>
+</div>
+
+<div class="info-card">
+<h3>🌍 Real-Life Application</h3>
+<p>{{ result.real_life_application }}</p>
+</div>
+
+<div class="info-card">
+<h3>⚠️ Common Mistake</h3>
+<p>{{ result.common_mistake }}</p>
+</div>
+
+<div class="info-card">
+<h3>🧠 Memory Trick</h3>
+<p>{{ result.memory_trick }}</p>
+</div>
+
+<form method="POST" action="/next-question">
+
+<button class="next-btn">
+
+Next Question →
+
+</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+# ==========================================================
+# StudyFree - Git Ignore
+# ==========================================================
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# StudyFree generated cache
+utils/engine/cache/
+*.tmp
+
+# Logs
+*.log
+logs/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+.venv312/
+.venv313/
+translator_env/
+backend_test_env/
+
+# Development backups
+*_BACKUP.py
+*_BEFORE_*.py
+*_backup.py
+*_LAUNCH_BACKUP.py
+*_backup.html
+*_BEFORE_*.html
+*_LAUNCH_BACKUP.html
+
+# Development test files
+test_*.py
