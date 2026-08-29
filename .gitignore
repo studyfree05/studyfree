@@ -59,3 +59,4 @@ backend_test_env/
 
 # Development test files
 test_*.py
+flask_session/
