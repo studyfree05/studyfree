@@ -20,11 +20,13 @@ Responsibilities:
 
 from __future__ import annotations
 
+import os
 import re
 import time
 from urllib.parse import urlparse, parse_qs
 
 from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.proxies import WebshareProxyConfig
 
 from youtube_transcript_api._errors import (
     TranscriptsDisabled,
