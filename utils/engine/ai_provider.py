@@ -87,7 +87,6 @@ PROVIDER_ORDER = [
 def _load_providers() -> None:
     """Load provider handlers lazily to avoid circular imports."""
 
-    from .providers.groq_provider import generate_with_groq
     from .providers.gemini_provider import generate_with_gemini
     from .providers.openrouter_provider import (
         generate_with_openrouter,
@@ -96,12 +95,6 @@ def _load_providers() -> None:
     from .providers.openai_provider import (
         generate_with_openai,
     )
-
-    register_provider(
-        "groq",
-        generate_with_groq,
-    )
-
     register_provider(
         "gemini",
         generate_with_gemini,
