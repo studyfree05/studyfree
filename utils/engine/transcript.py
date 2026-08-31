@@ -21,6 +21,7 @@ Responsibilities:
 from __future__ import annotations
 
 import os
+import requests
 import re
 import time
 from urllib.parse import urlparse, parse_qs
@@ -479,132 +480,85 @@ def fetch_transcript(
     url: str,
 ) -> dict:
     """
-    Download the best available YouTube transcript.
-
-    Returns:
-
-    {
-        "success": bool,
-        "video_id": str | None,
-        "language": str | None,
-        "text": str | None,
-        "error": str | None,
-    }
+    Download a YouTube transcript using FreeTranscriptAPI.
     """
 
-    video_id = extract_video_id(
-        url
-    )
-
-    # ------------------------------------------------------
-    # URL VALIDATION
-    # ------------------------------------------------------
+    video_id = extract_video_id(url)
 
     if not video_id:
-
         return {
             "success": False,
             "video_id": None,
             "language": None,
             "text": None,
-            "error": (
-                "Invalid YouTube URL."
-            ),
+            "error": "Invalid YouTube URL.",
         }
 
     last_error = None
 
-    # ------------------------------------------------------
-    # RETRIES
-    # ------------------------------------------------------
-
-    for attempt in range(
-        MAX_ATTEMPTS
-    ):
+    for attempt in range(MAX_ATTEMPTS):
 
         try:
-
-            # --------------------------------------------------
-            # CREATE API CLIENT
-            # --------------------------------------------------
-
-            api = (
-                YouTubeTranscriptApi()
+            response = requests.get(
+                "https://api.freetranscriptapi.com/v1/transcript",
+                params={
+                    "video_url": url,
+                },
+                timeout=30,
             )
 
-            # --------------------------------------------------
-            # DISCOVER ALL AVAILABLE TRANSCRIPTS
-            # --------------------------------------------------
+            if not response.ok:
+                try:
+                    error_data = response.json()
+                    error_message = (
+                        error_data.get("error", {}).get(
+                            "message",
+                            "Transcript API request failed.",
+                        )
+                    )
+                except Exception:
+                    error_message = (
+                        f"Transcript API returned HTTP "
+                        f"{response.status_code}."
+                    )
 
-            transcript_list = (
-                api.list(
-                    video_id
-                )
+                raise RuntimeError(error_message)
+
+            data = response.json()
+
+            transcript_chunks = data.get(
+                "transcript",
+                [],
             )
 
-            # --------------------------------------------------
-            # SELECT BEST TRANSCRIPT
-            # --------------------------------------------------
-
-            selected = (
-                _select_transcript(
-                    transcript_list
-                )
-            )
-
-            if selected is None:
-
+            if not transcript_chunks:
                 return {
                     "success": False,
                     "video_id": video_id,
-                    "language": None,
+                    "language": data.get("language"),
                     "text": None,
                     "error": (
-                        "No transcript is "
-                        "available for this video."
+                        "No transcript is available "
+                        "for this video."
                     ),
                 }
 
-            # --------------------------------------------------
-            # FETCH SELECTED TRANSCRIPT
-            # --------------------------------------------------
-
-            fetched = (
-                selected.fetch()
-            )
-
-            text = (
-                _transcript_to_text(
-                    fetched
-                )
+            text = _transcript_to_text(
+                transcript_chunks
             )
 
             if not text:
-
                 return {
                     "success": False,
                     "video_id": video_id,
-                    "language": getattr(
-                        selected,
-                        "language_code",
-                        None,
-                    ),
+                    "language": data.get("language"),
                     "text": None,
                     "error": (
-                        "The video transcript "
-                        "was empty."
+                        "The video transcript was empty."
                     ),
                 }
 
-            # --------------------------------------------------
-            # SUCCESS
-            # --------------------------------------------------
-
-            language = getattr(
-                selected,
-                "language_code",
-                None,
-            )
+            language = data.get("language")
 
             print(
                 "Transcript fetched:",
@@ -623,44 +577,6 @@ def fetch_transcript(
                 "error": None,
             }
 
-        # ------------------------------------------------------
-        # TRANSCRIPTS DISABLED
-        # ------------------------------------------------------
-
-        except TranscriptsDisabled:
-
-            return {
-                "success": False,
-                "video_id": video_id,
-                "language": None,
-                "text": None,
-                "error": (
-                    "Transcripts are disabled "
-                    "for this video."
-                ),
-            }
-
-        # ------------------------------------------------------
-        # NO TRANSCRIPT
-        # ------------------------------------------------------
-
-        except NoTranscriptFound:
-
-            return {
-                "success": False,
-                "video_id": video_id,
-                "language": None,
-                "text": None,
-                "error": (
-                    "No transcript is available "
-                    "for this video."
-                ),
-            }
-
-        # ------------------------------------------------------
-        # OTHER ERROR
-        # ------------------------------------------------------
-
         except Exception as exc:
 
             last_error = exc
@@ -672,24 +588,10 @@ def fetch_transcript(
                 exc,
             )
 
-            # Do not unnecessarily wait after
-            # the final attempt.
-
-            if attempt < (
-                MAX_ATTEMPTS - 1
-            ):
-
+            if attempt < MAX_ATTEMPTS - 1:
                 time.sleep(
-                    RETRY_DELAY
-                    *
-                    (
-                        attempt + 1
-                    )
+                    RETRY_DELAY * (attempt + 1)
                 )
-
-    # ------------------------------------------------------
-    # ALL ATTEMPTS FAILED
-    # ------------------------------------------------------
 
     return {
         "success": False,
