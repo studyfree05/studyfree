@@ -19,8 +19,8 @@ from __future__ import annotations
 
 import json
 
-from utils.engine.providers.openai_provider import (
-    generate_with_openai,
+from utils.engine.providers.gemini_provider import (
+    generate_with_gemini,
 )
 
 
@@ -951,10 +951,10 @@ def generate_learning_feedback(
         status,
     )
 
-    result = generate_with_openai(
+    result = generate_with_gemini(
         prompt=prompt,
         task="learning_feedback",
-        json_mode=True,
+        json_mode=False,
         max_tokens=1100,
         temperature=0.1,
     )
