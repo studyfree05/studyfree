@@ -961,6 +961,8 @@ def generate_learning_feedback(
 
     if not result.success:
 
+        print('[LEARNING FEEDBACK] OpenAI error:', result.error, 'model:', result.model)
+
         print(
             "[LEARNING FEEDBACK] "
             "OpenAI unavailable. "
