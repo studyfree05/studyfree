@@ -1874,23 +1874,16 @@ is complete.
 
 
                 /*
-                IMPORTANT:
-
-                DO NOT call event.preventDefault() here.
-
-                The browser now performs the normal POST request:
-
-                /ai-quiz
-                    ↓
-                Flask generates quiz
-                    ↓
-                Flask returns redirect
-                    ↓
-                Browser opens /quiz
-
-                The loading screen remains visible while
-                Flask is generating the quiz.
+                Give the browser a frame to paint the loading
+                screen before the normal Flask POST begins.
                 */
+                event.preventDefault();
+
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        HTMLFormElement.prototype.submit.call(quizForm);
+                    });
+                });
 
             }
 
