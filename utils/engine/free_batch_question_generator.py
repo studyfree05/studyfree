@@ -1512,7 +1512,7 @@ Evidence grounding has higher priority than diversity.
         prompt=prompt,
         task="mcq_batch",
         json_mode=True,
-        max_tokens=1300,
+        max_tokens=2500,
         temperature=0.1,
     )
 
@@ -1720,7 +1720,7 @@ MISSING REGION EVIDENCE:
         prompt=repair_prompt,
         task="mcq_region_repair",
         json_mode=True,
-        max_tokens=900,
+        max_tokens=1800,
         temperature=0.1,
     )
 
