@@ -103,6 +103,8 @@ def ai_quiz():
             "youtube_url",
             "",
         ).strip()
+
+        print("[URL DEBUG]", repr(youtube_url))
         force_new_quiz = session.pop(
             "force_new_quiz",
             False,
