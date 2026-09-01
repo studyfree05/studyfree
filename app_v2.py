@@ -305,7 +305,7 @@ def quiz():
         [],
     )
 
-    print("[SESSION DEBUG]", "count=", len(questions), "keys=", list(session.keys()))
+    print("[SESSION DEBUG]", "count=", len(questions), "keys=", list(session.keys()), "cookie=", request.cookies.get("studyfree_session"), "sid=", getattr(session, "sid", None))
 
     current = session.get(
         "current",
