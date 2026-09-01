@@ -61,18 +61,17 @@ app.secret_key = os.environ.get(
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_USE_SIGNER"] = True
+app.config["SESSION_FILE_DIR"] = os.path.join(
+    tempfile.gettempdir(),
+    "studyfree_sessions",
+)
 
 app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024
+app.config["SESSION_COOKIE_NAME"] = "studyfree_session"
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
-
-app.config["SESSION_COOKIE_SECURE"] = (
-    os.environ.get(
-        "FLASK_ENV",
-        "development",
-    ).lower()
-    == "production"
-)
+app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_PATH"] = "/"
 
 Session(app)
 
