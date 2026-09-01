@@ -144,6 +144,8 @@ def generate_with_gemini(
                     getattr(response, "text", "") or ""
                 ).strip()
 
+                print("[GEMINI RAW RESPONSE]", text)
+
                 if text:
                     print(
                         f"[GEMINI] task={task} "
