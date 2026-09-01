@@ -306,6 +306,8 @@ def quiz():
         [],
     )
 
+    print("[SESSION DEBUG]", "count=", len(questions), "keys=", list(session.keys()))
+
     current = session.get(
         "current",
         0,
