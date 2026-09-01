@@ -270,9 +270,17 @@ def ai_quiz():
             len(questions),
         )
 
-        return redirect(
+        response = redirect(
             url_for("quiz")
         )
+
+        print(
+            "[COOKIE SET DEBUG]",
+            "set_cookie=",
+            response.headers.get("Set-Cookie"),
+        )
+
+        return response
 
     return render_template(
         "ai_quiz.html"
