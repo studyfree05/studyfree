@@ -38,12 +38,21 @@ MAX_ATTEMPTS_PER_MODEL = 2
 RETRY_DELAY_SECONDS = 0.8
 
 
-def _schema() -> dict[str, Any]:
+def _schema(task: str) -> dict[str, Any]:
+    if task in {"mcq_batch", "short_batch", "long_batch"}:
+        min_items = 5
+        max_items = 5
+    else:
+        min_items = 1
+        max_items = 5
+
     return {
         "type": "OBJECT",
         "properties": {
             "questions": {
                 "type": "ARRAY",
+                "minItems": min_items,
+                "maxItems": max_items,
                 "items": {
                     "type": "OBJECT",
                     "properties": {
@@ -59,7 +68,6 @@ def _schema() -> dict[str, Any]:
                     },
                     "required": [
                         "region",
-                        "type",
                         "question",
                         "answer",
                         "evidence",
@@ -126,7 +134,7 @@ def generate_with_gemini(
 
                 if json_mode:
                     config_kwargs["response_mime_type"] = "application/json"
-                    config_kwargs["response_schema"] = _schema()
+                    config_kwargs["response_schema"] = _schema(task)
 
                 # IMPORTANT:
                 # No tools.
@@ -143,7 +151,6 @@ def generate_with_gemini(
                 text = str(
                     getattr(response, "text", "") or ""
                 ).strip()
-
                 print("[GEMINI RAW RESPONSE]", text)
 
                 if text:
