@@ -2438,7 +2438,220 @@ Never invent material just to make the question different.
         )
     )
 
-    return _parse_questions(
+
+    parsed = _parse_questions(
         result,
         "long",
     )
+
+    if parsed.get("success"):
+        return parsed
+
+    valid_questions = parsed.get(
+        "questions",
+        [],
+    )
+
+    valid_regions = {
+        item.get("region")
+        for item in valid_questions
+        if isinstance(item, dict)
+    }
+
+    expected_regions = {
+        1,
+        2,
+        3,
+        4,
+        5,
+    }
+
+    missing_regions = sorted(
+        expected_regions - valid_regions
+    )
+
+    if not missing_regions:
+        return parsed
+
+    print(
+        "[LONG REPAIR] Missing regions:",
+        missing_regions,
+    )
+
+    repair_parts = []
+
+    for region_number in missing_regions:
+
+        index = region_number - 1
+
+        if index < 0 or index >= len(regions):
+            continue
+
+        region = regions[index]
+
+        context = str(
+            region.get(
+                "long_context",
+                "",
+            )
+        ).strip()
+
+        if not context:
+            context = str(
+                region.get(
+                    "context",
+                    "",
+                )
+            ).strip()
+
+        if context:
+            repair_parts.append(
+                f"[VIDEO REGION {region_number}]\n{context}"
+            )
+
+    if not repair_parts:
+        return parsed
+
+    repair_evidence = "\n\n".join(
+        repair_parts
+    )
+
+    repair_prompt = f"""
+You are repairing a failed educational LONG-ANSWER batch.
+
+Create exactly ONE question for each missing region:
+
+{", ".join(str(x) for x in missing_regions)}
+
+Use ONLY the supplied evidence.
+Do NOT invent information.
+Do NOT create questions for other regions.
+
+The question must:
+- be written in English
+- end with ?
+- require explanation, reasoning, comparison,
+  process, cause/effect, or application
+- be independently understandable
+
+The answer must:
+- be written in English
+- directly answer the question
+- contain 2 to 4 sentences
+- use only information supported by the region
+
+Evidence must:
+- be copied directly from the assigned region
+- support the question and answer
+
+Return JSON only:
+
+{{
+  "questions": [
+    {{
+      "region": 1,
+      "question": "...",
+      "answer": "...",
+      "evidence": "..."
+    }}
+  ]
+}}
+
+Only include the requested missing regions.
+
+MISSING REGION EVIDENCE:
+
+{repair_evidence}
+""".strip()
+
+    repair_result = generate_with_provider_router(
+        prompt=repair_prompt,
+        task="long_region_repair",
+        json_mode=True,
+        max_tokens=2500,
+        temperature=0.1,
+    )
+
+    repair_parsed = _parse_questions(
+        repair_result,
+        "long",
+    )
+
+    repaired_questions = repair_parsed.get(
+        "questions",
+        [],
+    )
+
+    combined = []
+    used_regions = set()
+
+    for item in valid_questions + repaired_questions:
+
+        region = item.get("region")
+
+        if region in used_regions:
+            continue
+
+        used_regions.add(region)
+        combined.append(item)
+
+    combined.sort(
+        key=lambda item: item.get(
+            "region",
+            999,
+        )
+    )
+
+    final_regions = {
+        item.get("region")
+        for item in combined
+    }
+
+    if (
+        len(combined) == QUESTION_COUNT
+        and final_regions == expected_regions
+    ):
+
+        print(
+            "[LONG REPAIR] Successfully recovered missing regions."
+        )
+
+        return {
+            "success": True,
+            "questions": combined,
+            "count": len(combined),
+            "provider": (
+                repair_result.provider
+                or result.provider
+            ),
+            "model": (
+                repair_result.model
+                or result.model
+            ),
+            "error": None,
+        }
+
+    print(
+        "[LONG REPAIR] Repair failed.",
+        "Final regions:",
+        sorted(final_regions),
+    )
+
+    return {
+        "success": False,
+        "questions": combined,
+        "count": len(combined),
+        "provider": (
+            repair_result.provider
+            or result.provider
+        ),
+        "model": (
+            repair_result.model
+            or result.model
+        ),
+        "error": (
+            "Long-answer generation could not "
+            "produce one valid question for every "
+            "video region."
+        ),
+    }
