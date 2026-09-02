@@ -46,23 +46,7 @@ def generate_with_provider_router(
         )
 
     # Normal production order:
-    # OpenAI first, Gemini fallback.
-    result = generate_with_openai(
-        prompt=prompt,
-        task=task,
-        json_mode=json_mode,
-        max_tokens=max_tokens,
-        temperature=temperature,
-    )
-
-    if result.success:
-        return result
-
-    print(
-        f"[AI ROUTER] OpenAI failed: {result.error}. "
-        "Trying Gemini..."
-    )
-
+    # Gemini first, OpenAI fallback.
     gemini_result = generate_with_gemini(
         prompt=prompt,
         task=task,
@@ -75,16 +59,32 @@ def generate_with_provider_router(
         return gemini_result
 
     print(
-        f"[AI ROUTER] Gemini failed: {gemini_result.error}"
+        f"[AI ROUTER] Gemini failed: {gemini_result.error}. "
+        "Trying OpenAI..."
+    )
+
+    result = generate_with_openai(
+        prompt=prompt,
+        task=task,
+        json_mode=json_mode,
+        max_tokens=max_tokens,
+        temperature=temperature,
+    )
+
+    if result.success:
+        return result
+
+    print(
+        f"[AI ROUTER] OpenAI failed: {result.error}"
     )
 
     return AIResult(
         success=False,
         provider="router",
-        model="openai->gemini",
+        model="gemini->openai",
         text="",
         error=(
-            f"OpenAI: {result.error}; "
-            f"Gemini: {gemini_result.error}"
+            f"Gemini: {gemini_result.error}; "
+            f"OpenAI: {result.error}"
         ),
     )
