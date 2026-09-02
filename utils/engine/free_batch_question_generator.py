@@ -1,4 +1,4 @@
-﻿"""
+"""
 free_batch_question_generator.py
 --------------------------------
 
@@ -1562,19 +1562,32 @@ Evidence grounding has higher priority than diversity.
 
     repair_parts = []
 
+    total_regions = len(regions)
+
+    if total_regions <= QUESTION_COUNT:
+        selected_indexes = list(range(total_regions))
+    else:
+        selected_indexes = [
+            round(
+                i * (total_regions - 1)
+                / (QUESTION_COUNT - 1)
+            )
+            for i in range(QUESTION_COUNT)
+        ]
+
     for region_number in missing_regions:
 
-        index = (
-            region_number - 1
-        )
+        selected_position = region_number - 1
 
         if (
-            index < 0
-            or index >= len(regions)
+            selected_position < 0
+            or selected_position >= len(selected_indexes)
         ):
             continue
 
-        region = regions[index]
+        region = regions[
+            selected_indexes[selected_position]
+        ]
 
         context = str(
             region.get(
@@ -2480,14 +2493,30 @@ Never invent material just to make the question different.
 
     repair_parts = []
 
+    total_regions = len(regions)
+
+    if total_regions <= QUESTION_COUNT:
+        selected_indexes = list(range(total_regions))
+    else:
+        selected_indexes = [
+            round(
+                i * (total_regions - 1)
+                / (QUESTION_COUNT - 1)
+            )
+            for i in range(QUESTION_COUNT)
+        ]
+
     for region_number in missing_regions:
 
-        index = region_number - 1
+        selected_position = region_number - 1
 
-        if index < 0 or index >= len(regions):
+        if (
+            selected_position < 0
+            or selected_position >= len(selected_indexes)
+        ):
             continue
 
-        region = regions[index]
+        region = regions[selected_indexes[selected_position]]
 
         context = str(
             region.get(
