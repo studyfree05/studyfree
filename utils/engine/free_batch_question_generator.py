@@ -1733,7 +1733,7 @@ MISSING REGION EVIDENCE:
         prompt=repair_prompt,
         task="mcq_region_repair",
         json_mode=True,
-        max_tokens=1800,
+        max_tokens=2500,
         temperature=0.1,
     )
 
