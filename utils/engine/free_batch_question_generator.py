@@ -2056,17 +2056,30 @@ Return valid JSON only.
 
     repair_parts = []
 
+    total_regions = len(regions)
+
+    if total_regions <= QUESTION_COUNT:
+        selected_indexes = list(range(total_regions))
+    else:
+        selected_indexes = [
+            round(
+                i * (total_regions - 1)
+                / (QUESTION_COUNT - 1)
+            )
+            for i in range(QUESTION_COUNT)
+        ]
+
     for region_number in missing_regions:
 
-        index = region_number - 1
+        selected_position = region_number - 1
 
         if (
-            index < 0
-            or index >= len(regions)
+            selected_position < 0
+            or selected_position >= len(selected_indexes)
         ):
             continue
 
-        region = regions[index]
+        region = regions[selected_indexes[selected_position]]
 
         context = str(
             region.get(
@@ -2178,7 +2191,7 @@ MISSING REGION EVIDENCE:
         prompt=repair_prompt,
         task="short_region_repair",
         json_mode=True,
-        max_tokens=700,
+        max_tokens=2500,
         temperature=0.1,
     )
 
