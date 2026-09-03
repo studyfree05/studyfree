@@ -78,7 +78,6 @@ Session(app)
 # ==========================================================
 # HOME
 # ==========================================================
-
 @app.route("/")
 def home():
 
@@ -86,6 +85,10 @@ def home():
         url_for("ai_quiz")
     )
 
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 # ==========================================================
 # GENERATE QUIZ
