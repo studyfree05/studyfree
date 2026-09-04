@@ -14,16 +14,45 @@
 
     <script type="application/ld+json">
     {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "StudyFree05",
-      "url": "https://studyfree05.com/",
-      "description": "AI-powered learning platform that transforms educational YouTube videos into interactive learning experiences.",
-      "creator": {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+        "@type": "AboutPage",
+        "@id": "https://studyfree05.com/about#about",
+        "url": "https://studyfree05.com/about",
+        "name": "About StudyFree05",
+        "description": "StudyFree05 is an AI-powered learning platform that transforms educational YouTube videos into interactive learning experiences.",
+        "mainEntity": {
+            "@id": "https://studyfree05.com/#organization"
+        }
+        },
+        {
+        "@type": "WebSite",
+        "@id": "https://studyfree05.com/#website",
+        "url": "https://studyfree05.com/",
+        "name": "StudyFree05",
+        "description": "AI-powered learning platform that transforms educational YouTube videos into interactive learning experiences.",
+        "creator": {
+            "@id": "https://studyfree05.com/#person"
+        }
+        },
+        {
+        "@type": "Organization",
+        "@id": "https://studyfree05.com/#organization",
+        "name": "StudyFree05",
+        "url": "https://studyfree05.com/",
+        "founder": {
+            "@id": "https://studyfree05.com/#person"
+        }
+        },
+        {
         "@type": "Person",
+        "@id": "https://studyfree05.com/#person",
         "name": "SANGAPU YASHWANTH",
-        "jobTitle": "Creator and Developer of StudyFree05"
-      }
+        "jobTitle": "Creator and Developer of StudyFree05",
+        "description": "SANGAPU YASHWANTH is the creator and developer behind StudyFree05, responsible for developing the platform and its YouTube-to-AI quiz learning workflow."
+        }
+    ]
     }
     </script>
 
@@ -483,9 +512,10 @@
                     </p>
 
                     <p class="creator-description">
-                        SANGAPU YASHWANTH is the creator and developer behind
-                        StudyFree05, responsible for developing the platform
-                        and its YouTube-to-AI quiz learning workflow.
+                        SANGAPU YASHWANTH is the creator and developer of StudyFree05,
+                        an independently developed AI-powered learning platform that
+                        transforms educational YouTube videos into structured,
+                        interactive learning experiences.
                     </p>
                 </div>
 
