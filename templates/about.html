@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,7 +7,7 @@
     <title>StudyFree05 — AI Learning Platform | Creator & Developer</title>
 
     <meta name="description"
-          content="StudyFree05 is an AI-powered learning platform that transforms educational YouTube videos into interactive quizzes with MCQs, Short Answers, Long Answers, Memory Tricks, Real-Life Examples and Exam Tips. Created and developed by SANGAPU YASHWANTH.">
+          content="StudyFree05 is an AI-powered learning platform that transforms educational YouTube videos into interactive learning experiences with MCQs, Short Answers, Long Answers, Memory Tricks, Real-Life Examples and Exam Tips. Created and developed by SANGAPU YASHWANTH.">
 
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://studyfree05.com/about">
@@ -18,7 +18,7 @@
       "@type": "WebSite",
       "name": "StudyFree05",
       "url": "https://studyfree05.com/",
-      "description": "AI-powered learning platform for turning educational YouTube videos into interactive learning experiences.",
+      "description": "AI-powered learning platform that transforms educational YouTube videos into interactive learning experiences.",
       "creator": {
         "@type": "Person",
         "name": "SANGAPU YASHWANTH",
@@ -26,147 +26,505 @@
       }
     }
     </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #070b14;
+            color: #eef2ff;
+            line-height: 1.7;
+        }
+
+        .container {
+            width: min(1120px, 92%);
+            margin: 0 auto;
+        }
+
+        header {
+            padding: 80px 0 55px;
+            text-align: center;
+            background:
+                radial-gradient(circle at top, #18264a 0%, #070b14 55%);
+            border-bottom: 1px solid #1d2942;
+        }
+
+        .brand {
+            font-size: clamp(42px, 7vw, 72px);
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 12px;
+        }
+
+        .tagline {
+            color: #aeb9d4;
+            font-size: clamp(18px, 3vw, 24px);
+        }
+
+        .hero-badge {
+            display: inline-block;
+            margin-bottom: 22px;
+            padding: 7px 16px;
+            border: 1px solid #33466f;
+            border-radius: 999px;
+            color: #b9c8ee;
+            background: #10182b;
+            font-size: 14px;
+        }
+
+        section {
+            padding: 65px 0;
+        }
+
+        .section-title {
+            font-size: clamp(28px, 4vw, 40px);
+            margin-bottom: 22px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-text {
+            max-width: 900px;
+            color: #b9c3d9;
+            font-size: 17px;
+        }
+
+        .card {
+            background: #0d1424;
+            border: 1px solid #202e49;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.22);
+        }
+
+        .workflow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            margin-top: 28px;
+        }
+
+        .workflow span {
+            background: #121c31;
+            border: 1px solid #2a3b5c;
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: #dce5ff;
+            font-size: 14px;
+        }
+
+        .arrow {
+            color: #7184ad;
+            font-size: 18px;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 30px;
+        }
+
+        .feature {
+            background: #0d1424;
+            border: 1px solid #202e49;
+            border-radius: 16px;
+            padding: 23px;
+        }
+
+        .feature h3 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #f4f7ff;
+        }
+
+        .feature p {
+            color: #aeb9d0;
+            font-size: 15px;
+        }
+
+        .creator {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 32px;
+            align-items: center;
+            background: linear-gradient(135deg, #101a30, #0b1120);
+            border: 1px solid #293b5e;
+            border-radius: 22px;
+            padding: 35px;
+        }
+
+        .creator-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 2px solid #40567f;
+            background: #111a2c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #71809d;
+            font-size: 13px;
+        }
+
+        .creator-name {
+            font-size: clamp(28px, 5vw, 42px);
+            margin-bottom: 5px;
+        }
+
+        .creator-role {
+            color: #9fb1d5;
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .creator-description {
+            color: #b5c0d6;
+        }
+
+        .project-box {
+            margin-top: 25px;
+            padding: 22px;
+            background: #0d1424;
+            border: 1px solid #202e49;
+            border-radius: 16px;
+        }
+
+        .project-box strong {
+            color: #eef2ff;
+        }
+
+        footer {
+            border-top: 1px solid #1d2942;
+            padding: 35px 0;
+            text-align: center;
+            color: #7886a3;
+            font-size: 14px;
+        }
+
+        @media (max-width: 700px) {
+            header {
+                padding: 60px 0 45px;
+            }
+
+            section {
+                padding: 45px 0;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .creator {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .creator-photo {
+                margin: 0 auto;
+            }
+
+            .workflow {
+                justify-content: center;
+            }
+
+            .arrow {
+                display: none;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <main>
+<header>
+    <div class="container">
+        <div class="hero-badge">AI-Powered Learning Platform</div>
 
-        <header>
-            <h1>StudyFree05</h1>
-            <p>AI-Powered Learning Platform</p>
-        </header>
+        <h1 class="brand">StudyFree05</h1>
 
-        <section>
-            <h2>What is StudyFree05?</h2>
+        <p class="tagline">
+            Turning educational videos into active learning.
+        </p>
+    </div>
+</header>
 
-            <p>
-                StudyFree05 is an AI-powered learning platform designed to
-                transform educational YouTube videos into interactive and
-                effective learning experiences.
-            </p>
+<main>
 
-            <p>
-                Instead of simply watching an educational video, students can
-                use StudyFree05 to understand the lesson, practice questions,
-                evaluate their knowledge and receive learning-focused feedback.
-            </p>
-        </section>
+    <section>
+        <div class="container">
+            <h2 class="section-title">What is StudyFree05?</h2>
 
-        <section>
-            <h2>What Problem Does StudyFree05 Solve?</h2>
+            <div class="card">
+                <p class="section-text">
+                    StudyFree05 is an AI-powered learning platform designed
+                    to transform educational YouTube videos into interactive
+                    and effective learning experiences.
+                </p>
 
-            <p>
-                Students often watch educational videos passively without
-                knowing how well they understood the lesson. StudyFree05 turns
-                passive video watching into active learning by converting
-                educational content into structured questions and learning
-                support.
-            </p>
-        </section>
+                <br>
 
-        <section>
-            <h2>How StudyFree05 Works</h2>
+                <p class="section-text">
+                    Instead of simply watching an educational video, students
+                    can use StudyFree05 to understand the lesson, practice
+                    questions, evaluate their knowledge and receive
+                    learning-focused feedback.
+                </p>
+            </div>
+        </div>
+    </section>
 
-            <p>YouTube Video -> Transcript -> AI Understanding -> Whole-Video Analysis -> Question Generation -> Validation -> Quiz -> Evaluation -> Feedback -> Results</p>
-        </section>
+    <section>
+        <div class="container">
+            <h2 class="section-title">What Problem Does StudyFree05 Solve?</h2>
 
-        <section>
-            <h2>Present Features</h2>
+            <div class="card">
+                <p class="section-text">
+                    Students often watch educational videos passively without
+                    knowing how well they understood the lesson. StudyFree05
+                    turns passive video watching into active learning by
+                    converting educational content into structured questions
+                    and learning support.
+                </p>
+            </div>
+        </div>
+    </section>
 
-            <ul>
-                <li><strong>YouTube-to-Quiz</strong> — Converts educational YouTube videos into interactive quizzes.</li>
+    <section>
+        <div class="container">
+            <h2 class="section-title">How StudyFree05 Works</h2>
 
-                <li><strong>Transcript-Based Learning</strong> — Processes the video's transcript to understand the lesson content.</li>
+            <div class="card">
+                <p class="section-text">
+                    StudyFree05 follows a structured YouTube-to-learning
+                    workflow:
+                </p>
 
-                <li><strong>AI-Powered Question Generation</strong> — Creates questions based on the educational content.</li>
+                <div class="workflow">
+                    <span>YouTube Video</span>
+                    <b class="arrow">→</b>
+                    <span>Transcript</span>
+                    <b class="arrow">→</b>
+                    <span>AI Understanding</span>
+                    <b class="arrow">→</b>
+                    <span>Whole-Video Analysis</span>
+                    <b class="arrow">→</b>
+                    <span>Question Generation</span>
+                    <b class="arrow">→</b>
+                    <span>Validation</span>
+                    <b class="arrow">→</b>
+                    <span>Quiz</span>
+                    <b class="arrow">→</b>
+                    <span>Evaluation</span>
+                    <b class="arrow">→</b>
+                    <span>Feedback</span>
+                    <b class="arrow">→</b>
+                    <span>Results</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-                <li><strong>MCQ Generation</strong> — Generates multiple-choice questions with four answer options.</li>
+    <section>
+        <div class="container">
+            <h2 class="section-title">Present Features</h2>
 
-                <li><strong>Short Answer Questions</strong> — Tests students' ability to provide concise answers.</li>
+            <div class="features">
 
-                <li><strong>Long Answer Questions</strong> — Tests deeper understanding and explanation.</li>
+                <article class="feature">
+                    <h3>YouTube-to-Quiz</h3>
+                    <p>Converts educational YouTube videos into interactive quizzes.</p>
+                </article>
 
-                <li><strong>Whole-Video Coverage</strong> — Generates questions from different regions of the entire video.</li>
+                <article class="feature">
+                    <h3>Transcript-Based Learning</h3>
+                    <p>Processes the video's transcript to understand the lesson content.</p>
+                </article>
 
-                <li><strong>Balanced Question Distribution</strong> — Distributes questions across different parts of the lesson.</li>
+                <article class="feature">
+                    <h3>AI-Powered Question Generation</h3>
+                    <p>Creates questions based on the educational content.</p>
+                </article>
 
-                <li><strong>Memory Tricks</strong> — Provides easy-to-remember techniques to help students recall important concepts.</li>
+                <article class="feature">
+                    <h3>MCQ Generation</h3>
+                    <p>Generates multiple-choice questions with four answer options.</p>
+                </article>
 
-                <li><strong>Real-Life Examples</strong> — Connects concepts with practical, everyday examples to make difficult topics easier to understand.</li>
+                <article class="feature">
+                    <h3>Short Answer Questions</h3>
+                    <p>Tests students' ability to provide concise answers.</p>
+                </article>
 
-                <li><strong>Exam Tips</strong> — Highlights useful exam-focused points, approaches and important things to remember.</li>
+                <article class="feature">
+                    <h3>Long Answer Questions</h3>
+                    <p>Tests deeper understanding and explanation.</p>
+                </article>
 
-                <li><strong>Easy Concept Explanations</strong> — Helps make difficult concepts easier to understand.</li>
+                <article class="feature">
+                    <h3>Whole-Video Coverage</h3>
+                    <p>Generates questions from different regions of the entire video.</p>
+                </article>
 
-                <li><strong>Important Points</strong> — Identifies key information students should focus on.</li>
+                <article class="feature">
+                    <h3>Balanced Question Distribution</h3>
+                    <p>Distributes questions across different parts of the lesson.</p>
+                </article>
 
-                <li><strong>Evidence-Based Questions</strong> — Grounds generated questions in the educational content from the video.</li>
+                <article class="feature">
+                    <h3>Memory Tricks</h3>
+                    <p>Provides easy-to-remember techniques to help students recall important concepts.</p>
+                </article>
 
-                <li><strong>Question Validation</strong> — Checks generated questions for structure, answers, evidence and video-region coverage.</li>
+                <article class="feature">
+                    <h3>Real-Life Examples</h3>
+                    <p>Connects concepts with practical, everyday examples to make difficult topics easier to understand.</p>
+                </article>
 
-                <li><strong>Answer Evaluation</strong> — Evaluates written answers to help students understand their performance.</li>
+                <article class="feature">
+                    <h3>Exam Tips</h3>
+                    <p>Highlights useful exam-focused points, approaches and important things to remember.</p>
+                </article>
 
-                <li><strong>Learning Feedback</strong> — Provides feedback to help students identify areas for improvement.</li>
+                <article class="feature">
+                    <h3>Easy Concept Explanations</h3>
+                    <p>Helps make difficult concepts easier to understand.</p>
+                </article>
 
-                <li><strong>Scoring and Results</strong> — Provides quiz scores and results after completing the quiz.</li>
+                <article class="feature">
+                    <h3>Important Points</h3>
+                    <p>Identifies key information students should focus on.</p>
+                </article>
 
-                <li><strong>Interactive Learning Flow</strong> — Students answer questions step by step instead of only watching a video.</li>
+                <article class="feature">
+                    <h3>Evidence-Based Questions</h3>
+                    <p>Grounds generated questions in educational content from the video.</p>
+                </article>
 
-                <li><strong>Structured Learning</strong> — Brings explanation, practice, evaluation and feedback together in one learning experience.</li>
-            </ul>
-        </section>
+                <article class="feature">
+                    <h3>Question Validation</h3>
+                    <p>Checks generated questions for structure, answers, evidence and video-region coverage.</p>
+                </article>
 
-        <section>
-            <h2>The StudyFree05 Learning Experience</h2>
+                <article class="feature">
+                    <h3>Answer Evaluation</h3>
+                    <p>Evaluates written answers to help students understand their performance.</p>
+                </article>
 
-            <p>
-                StudyFree05 combines educational video content with
-                AI-assisted learning, practice, evaluation and feedback.
-            </p>
+                <article class="feature">
+                    <h3>Learning Feedback</h3>
+                    <p>Provides feedback to help students identify areas for improvement.</p>
+                </article>
 
-            <p>
-                The goal is to help students move from passive watching to
-                active, structured and measurable learning.
-            </p>
-        </section>
+                <article class="feature">
+                    <h3>Scoring and Results</h3>
+                    <p>Provides quiz scores and results after completing the quiz.</p>
+                </article>
 
-        <section>
-            <h2>Meet the Creator</h2>
+                <article class="feature">
+                    <h3>Interactive Learning Flow</h3>
+                    <p>Students answer questions step by step instead of only watching a video.</p>
+                </article>
 
-            <h3>SANGAPU YASHWANTH</h3>
+                <article class="feature">
+                    <h3>Structured Learning</h3>
+                    <p>Brings explanation, practice, evaluation and feedback together in one learning experience.</p>
+                </article>
 
-            <p>
-                <strong>Creator &amp; Developer of StudyFree05</strong>
-            </p>
+            </div>
+        </div>
+    </section>
 
-            <p>
-                SANGAPU YASHWANTH is the creator and developer behind
-                StudyFree05, responsible for developing the platform and its
-                YouTube-to-AI quiz learning workflow.
-            </p>
-        </section>
+    <section>
+        <div class="container">
+            <h2 class="section-title">The StudyFree05 Learning Experience</h2>
 
-        <section>
-            <h2>About the Project</h2>
+            <div class="card">
+                <p class="section-text">
+                    StudyFree05 combines educational video content with
+                    AI-assisted learning, practice, evaluation and feedback.
+                </p>
 
-            <p>
-                StudyFree05 is an independently developed educational
-                technology project focused on making video-based learning
-                more interactive, active, structured and useful for students.
-            </p>
-        </section>
+                <br>
 
-        <footer>
-            <p>
-                StudyFree05 — AI-Powered Learning Platform
-            </p>
-        </footer>
+                <p class="section-text">
+                    The goal is to help students move from passive watching
+                    to active, structured and measurable learning.
+                </p>
+            </div>
+        </div>
+    </section>
 
-    </main>
+    <section>
+        <div class="container">
+            <h2 class="section-title">Meet the Creator</h2>
+
+            <div class="creator">
+
+                <div class="creator-photo">
+                    Creator Photo
+                </div>
+
+                <div>
+                    <h3 class="creator-name">SANGAPU YASHWANTH</h3>
+
+                    <p class="creator-role">
+                        Creator &amp; Developer of StudyFree05
+                    </p>
+
+                    <p class="creator-description">
+                        SANGAPU YASHWANTH is the creator and developer behind
+                        StudyFree05, responsible for developing the platform
+                        and its YouTube-to-AI quiz learning workflow.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="project-box">
+                <p>
+                    <strong>Project:</strong> StudyFree05
+                </p>
+
+                <p>
+                    <strong>Website:</strong> studyfree05.com
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="container">
+            <h2 class="section-title">About the Project</h2>
+
+            <div class="card">
+                <p class="section-text">
+                    StudyFree05 is an independently developed educational
+                    technology project focused on making video-based learning
+                    more interactive, active, structured and useful for
+                    students.
+                </p>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="container">
+        StudyFree05 — AI-Powered Learning Platform
+    </div>
+</footer>
 
 </body>
 </html>
-
-
-
