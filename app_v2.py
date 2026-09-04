@@ -90,6 +90,18 @@ def home():
 def about():
     return render_template("about.html")
 
+
+@app.route("/robots.txt")
+def robots_txt():
+    return (
+        "User-agent: *\n"
+        "Allow: /\n"
+        "Sitemap: https://studyfree05.com/sitemap.xml\n",
+        200,
+        {"Content-Type": "text/plain"}
+    )
+
+
 # ==========================================================
 # GENERATE QUIZ
 # ==========================================================
