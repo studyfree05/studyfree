@@ -45,12 +45,12 @@ def generate_with_provider_router(
             temperature=temperature,
         )
 
-        # Normal production: Gemini only.
-        # Do not fall back to OpenAI automatically.
-        return generate_with_gemini(
-            prompt=prompt,
-            task=task,
-            json_mode=json_mode,
-            max_tokens=max_tokens,
-            temperature=temperature,
-        )
+    # Normal production: Gemini only.
+    # Do not fall back to OpenAI automatically.
+    return generate_with_gemini(
+        prompt=prompt,
+        task=task,
+        json_mode=json_mode,
+        max_tokens=max_tokens,
+        temperature=temperature,
+    )
