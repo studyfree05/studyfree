@@ -30,8 +30,8 @@ from ..ai_provider import AIResult
 # Stable models first. Do not use experimental model names from the
 # environment when the quiz pipeline needs predictable JSON output.
 GEMINI_MODELS = [
-    "gemini-3.6-flash",
     "gemini-3.5-flash-lite",
+    "gemini-3.6-flash",
 ]
 
 MAX_ATTEMPTS_PER_MODEL = 2
@@ -154,6 +154,54 @@ def generate_with_gemini(
                 print("[GEMINI RAW RESPONSE]", text)
 
                 if text:
+                    # -------------------------------------------------
+                    # BATCH COMPLETENESS CHECK
+                    #
+                    # Never accept an incomplete MCQ / Short / Long
+                    # batch as a successful provider response.
+                    # -------------------------------------------------
+                    if task in {"mcq_batch", "short_batch", "long_batch"}:
+                        try:
+                            import json
+
+                            parsed = json.loads(text)
+                            questions = parsed.get("questions", [])
+
+                            if not isinstance(questions, list) or len(questions) != 5:
+                                last_error = (
+                                    f"Incomplete {task} response: "
+                                    f"expected 5 questions, "
+                                    f"got {len(questions) if isinstance(questions, list) else 0}."
+                                )
+
+                                print(
+                                    f"[GEMINI] incomplete batch | "
+                                    f"task={task} "
+                                    f"model={model_name} "
+                                    f"attempt={attempt} "
+                                    f"questions="
+                                    f"{len(questions) if isinstance(questions, list) else 0} "
+                                    f"| trying next model"
+                                )
+
+                                break
+
+                        except Exception as exc:
+                            last_error = (
+                                f"Invalid JSON from Gemini for {task}: "
+                                f"{type(exc).__name__}"
+                            )
+
+                            print(
+                                f"[GEMINI] invalid batch JSON | "
+                                f"task={task} "
+                                f"model={model_name} "
+                                f"attempt={attempt} "
+                                f"| trying next model"
+                            )
+
+                            break
+
                     print(
                         f"[GEMINI] task={task} "
                         f"model={model_name} "
