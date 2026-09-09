@@ -14,565 +14,703 @@
 
     <script type="application/ld+json">
     {
-    "@context": "https://schema.org",
-    "@graph": [
+      "@context": "https://schema.org",
+      "@graph": [
         {
-        "@type": "AboutPage",
-        "@id": "https://studyfree05.com/about#about",
-        "url": "https://studyfree05.com/about",
-        "name": "About StudyFree05",
-        "description": "StudyFree05 is an AI-powered learning platform that transforms educational YouTube videos into interactive learning experiences.",
-        "mainEntity": {
-            "@id": "https://studyfree05.com/#organization"
-        }
+          "@type": "AboutPage",
+          "@id": "https://studyfree05.com/about#about",
+          "url": "https://studyfree05.com/about",
+          "name": "About StudyFree05",
+          "description": "StudyFree05 is an AI-powered learning platform that transforms educational YouTube videos into interactive learning experiences.",
+          "mainEntity": {"@id": "https://studyfree05.com/#organization"}
         },
         {
-        "@type": "WebSite",
-        "@id": "https://studyfree05.com/#website",
-        "url": "https://studyfree05.com/",
-        "name": "StudyFree05",
-        "description": "AI-powered learning platform that transforms educational YouTube videos into interactive learning experiences.",
-        "creator": {
-            "@id": "https://studyfree05.com/#person"
-        }
+          "@type": "WebSite",
+          "@id": "https://studyfree05.com/#website",
+          "url": "https://studyfree05.com/",
+          "name": "StudyFree05",
+          "description": "AI-powered learning platform that transforms educational YouTube videos into interactive learning experiences.",
+          "creator": {"@id": "https://studyfree05.com/#person"}
         },
         {
-        "@type": "Organization",
-        "@id": "https://studyfree05.com/#organization",
-        "name": "StudyFree05",
-        "url": "https://studyfree05.com/",
-        "founder": {
-            "@id": "https://studyfree05.com/#person"
-        }
+          "@type": "Organization",
+          "@id": "https://studyfree05.com/#organization",
+          "name": "StudyFree05",
+          "url": "https://studyfree05.com/",
+          "founder": {"@id": "https://studyfree05.com/#person"}
         },
         {
-        "@type": "Person",
-        "@id": "https://studyfree05.com/#person",
-        "name": "SANGAPU YASHWANTH",
-        "jobTitle": "Creator and Developer of StudyFree05",
-        "url": "https://studyfree05.com/about",
-        "worksFor": {
-            "@id": "https://studyfree05.com/#organization"
+          "@type": "Person",
+          "@id": "https://studyfree05.com/#person",
+          "name": "SANGAPU YASHWANTH",
+          "jobTitle": "Creator and Developer of StudyFree05",
+          "url": "https://studyfree05.com/about",
+          "worksFor": {"@id": "https://studyfree05.com/#organization"},
+          "description": "SANGAPU YASHWANTH is the creator and developer behind StudyFree05, responsible for developing the platform and its YouTube-to-AI quiz learning workflow."
         }
-        "description": "SANGAPU YASHWANTH is the creator and developer behind StudyFree05, responsible for developing the platform and its YouTube-to-AI quiz learning workflow."
-        }
-    ]
+      ]
     }
     </script>
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background: #070b14;
-            color: #eef2ff;
-            line-height: 1.7;
+            background: #f7f8fa;
+            color: #15171b;
+            line-height: 1.6;
         }
 
-        .container {
-            width: min(1120px, 92%);
-            margin: 0 auto;
-        }
-
-        header {
-            padding: 80px 0 55px;
-            text-align: center;
+        .page {
+            min-height: 100vh;
             background:
-                radial-gradient(circle at top, #18264a 0%, #070b14 55%);
-            border-bottom: 1px solid #1d2942;
+                radial-gradient(circle at 78% 20%, rgba(244,191,0,.12), transparent 25%),
+                linear-gradient(135deg, #fff 0%, #f8f9fb 65%, #f2f4f7 100%);
         }
 
         .brand {
-            font-size: clamp(42px, 7vw, 72px);
-            font-weight: 800;
+            padding: 32px 6vw 0;
+        }
+
+        .brand h2 {
+            font-size: clamp(30px, 3.2vw, 48px);
+            line-height: 1;
             letter-spacing: -2px;
-            margin-bottom: 12px;
+            font-weight: 800;
         }
 
-        .tagline {
-            color: #aeb9d4;
-            font-size: clamp(18px, 3vw, 24px);
+        .brand h2 span { color: #efb900; }
+
+        .brand p {
+            margin-top: 9px;
+            color: #747d88;
+            font-size: 12px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
         }
 
-        .hero-badge {
-            display: inline-block;
-            margin-bottom: 22px;
-            padding: 7px 16px;
-            border: 1px solid #33466f;
-            border-radius: 999px;
-            color: #b9c8ee;
-            background: #10182b;
+        .hero {
+            width: min(1400px, 88vw);
+            min-height: 690px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 48% 52%;
+            align-items: center;
+        }
+
+        .hero-copy {
+            padding: 60px 0;
+            position: relative;
+            z-index: 3;
+        }
+
+        .eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 28px;
+            color: #69727e;
             font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            text-transform: uppercase;
         }
 
-        section {
-            padding: 65px 0;
+        .eyebrow::before {
+            content: "";
+            width: 72px;
+            height: 2px;
+            background: #efb900;
         }
+
+        .hero h1 {
+            font-size: clamp(56px, 6.8vw, 102px);
+            line-height: .98;
+            letter-spacing: -5px;
+            font-weight: 800;
+            color: #101216;
+        }
+
+        .hero h1 .gold { color: #efb900; }
+
+        .intro {
+            max-width: 690px;
+            margin-top: 30px;
+            color: #5e6772;
+            font-size: clamp(17px, 1.45vw, 22px);
+            line-height: 1.55;
+        }
+
+        .highlights {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 700px;
+            margin-top: 45px;
+            border-top: 1px solid #d9dde2;
+            padding-top: 22px;
+        }
+
+        .highlight {
+            min-height: 92px;
+            padding: 0 22px;
+            border-right: 1px solid #d9dde2;
+        }
+
+        .highlight:first-child { padding-left: 0; }
+        .highlight:last-child { border-right: 0; }
+
+        .icon {
+            font-size: 29px;
+            margin-bottom: 6px;
+        }
+
+        .highlight strong {
+            display: block;
+            color: #252a31;
+            font-size: 15px;
+            line-height: 1.35;
+        }
+
+
+        .portrait-bg {
+            position: absolute;
+            width: min(590px, 43vw);
+            height: min(590px, 43vw);
+            border-radius: 50%;
+            background: #fff0bd;
+            right: 8%;
+            top: 13%;
+            z-index: 0;
+        }
+
+        .portrait-area {
+            position: relative;
+            min-height: 690px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .portrait {
+            position: relative;
+            z-index: 2;
+            width: min(650px, 50vw);
+            max-height: 690px;
+            object-fit: contain;
+            object-position: center bottom;
+            display: block;
+            filter: drop-shadow(0 22px 28px rgba(0,0,0,.08));
+        }
+
+
+
+        .signature {
+            position: absolute;
+            z-index: 4;
+            right: -1%;
+            top: 16%;
+            width: clamp(210px, 20vw, 315px);
+            text-align: center;
+        }
+
+        .signature-image {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+
+        .signature-role {
+            margin-top: 3px;
+            color: #68717d;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 1.45;
+        }
+
+        .content {
+            background: #fff;
+            border-top: 1px solid #e3e6ea;
+            padding: 75px 6vw;
+        }
+
+        .container {
+            width: min(1120px, 92vw);
+            margin: 0 auto;
+        }
+
+        .section {
+            padding: 0 0 70px;
+        }
+
+        .section:last-child { padding-bottom: 0; }
 
         .section-title {
-            font-size: clamp(28px, 4vw, 40px);
+            font-size: clamp(28px, 4vw, 43px);
+            line-height: 1.05;
+            letter-spacing: -1.5px;
             margin-bottom: 22px;
-            letter-spacing: -0.5px;
-        }
-
-        .section-text {
-            max-width: 900px;
-            color: #b9c3d9;
-            font-size: 17px;
         }
 
         .card {
-            background: #0d1424;
-            border: 1px solid #202e49;
+            background: #fafbfc;
+            border: 1px solid #e0e4e8;
             border-radius: 18px;
             padding: 30px;
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.22);
+        }
+
+        .text {
+            color: #606a76;
+            font-size: 17px;
+            line-height: 1.75;
         }
 
         .workflow {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
             align-items: center;
-            margin-top: 28px;
+            gap: 9px;
+            margin-top: 26px;
         }
 
         .workflow span {
-            background: #121c31;
-            border: 1px solid #2a3b5c;
-            border-radius: 10px;
-            padding: 10px 14px;
-            color: #dce5ff;
+            background: #fff;
+            border: 1px solid #dfe4e9;
+            border-radius: 9px;
+            padding: 9px 12px;
+            color: #3c444e;
             font-size: 14px;
         }
 
-        .arrow {
-            color: #7184ad;
-            font-size: 18px;
-        }
+        .arrow { color: #a2a9b1; }
 
         .features {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
-            margin-top: 30px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
         }
 
         .feature {
-            background: #0d1424;
-            border: 1px solid #202e49;
-            border-radius: 16px;
-            padding: 23px;
+            padding: 21px;
+            background: #fafbfc;
+            border: 1px solid #e0e4e8;
+            border-radius: 14px;
         }
 
         .feature h3 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: #f4f7ff;
+            margin-bottom: 7px;
+            color: #171a1f;
+            font-size: 17px;
         }
 
         .feature p {
-            color: #aeb9d0;
+            color: #69727d;
             font-size: 15px;
+            line-height: 1.6;
         }
 
         .creator {
-            display: grid;
-            grid-template-columns: 180px 1fr;
-            gap: 32px;
-            align-items: center;
-            background: linear-gradient(135deg, #101a30, #0b1120);
-            border: 1px solid #293b5e;
-            border-radius: 22px;
-            padding: 35px;
+            display: block;
+            padding: 32px;
+            border: 1px solid #dfe4e9;
+            border-radius: 18px;
+            background: #fafbfc;
         }
 
-        .creator-photo {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            border: 2px solid #40567f;
-            background: #111a2c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: #71809d;
-            font-size: 13px;
-        }
-        .creator-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            display: block;
-        }
 
         .creator-name {
-            font-size: clamp(28px, 5vw, 42px);
-            margin-bottom: 5px;
+            font-size: clamp(28px, 4vw, 43px);
+            line-height: 1.05;
+            margin-bottom: 7px;
         }
 
         .creator-role {
-            color: #9fb1d5;
-            font-size: 18px;
-            margin-bottom: 16px;
-        }
-
-        .creator-description {
-            color: #b5c0d6;
+            color: #e1aa00;
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 15px;
         }
 
         .project-box {
-            margin-top: 25px;
-            padding: 22px;
-            background: #0d1424;
-            border: 1px solid #202e49;
-            border-radius: 16px;
+            margin-top: 18px;
+            padding: 20px;
+            border: 1px solid #e0e4e8;
+            border-radius: 14px;
+            background: #fff;
         }
 
-        .project-box strong {
-            color: #eef2ff;
+        .project-box p {
+            color: #626c77;
+            margin: 4px 0;
         }
+
+        .project-box strong { color: #171a1f; }
 
         footer {
-            border-top: 1px solid #1d2942;
-            padding: 35px 0;
+            padding: 30px 6vw;
             text-align: center;
-            color: #7886a3;
-            font-size: 14px;
+            color: #8a929d;
+            background: #fff;
+            border-top: 1px solid #e2e5e9;
+            font-size: 13px;
         }
 
-        @media (max-width: 700px) {
-            header {
-                padding: 60px 0 45px;
-            }
-
-            section {
-                padding: 45px 0;
-            }
-
-            .features {
+        @media (max-width: 1050px) {
+            .hero {
                 grid-template-columns: 1fr;
+                min-height: auto;
             }
 
-            .creator {
+            .hero-copy { padding: 60px 0 20px; }
+
+    
+        .portrait-bg {
+            position: absolute;
+            width: min(590px, 43vw);
+            height: min(590px, 43vw);
+            border-radius: 50%;
+            background: #fff0bd;
+            right: 8%;
+            top: 13%;
+            z-index: 0;
+        }
+
+        .portrait-area {
+                min-height: 600px;
+                margin-top: -20px;
+            }
+
+            .portrait {
+                width: min(680px, 82vw);
+            }
+
+            .portrait-bg {
+                width: 500px;
+                height: 500px;
+                right: 50%;
+                transform: translateX(50%);
+            }
+
+            .signature {
+                right: 4%;
+                top: 9%;
+                width: 250px;
+            }
+
+
+
+            .creator-photo { margin: 0 auto; }
+        }
+
+        @media (max-width: 650px) {
+            .brand { padding: 25px 6vw 0; }
+
+            .brand h2 { font-size: 34px; }
+            .brand p { font-size: 9px; letter-spacing: 3px; }
+
+            .hero { width: 88vw; }
+            .hero-copy { padding-top: 45px; }
+
+            .eyebrow {
+                font-size: 10px;
+                letter-spacing: 3px;
+                gap: 11px;
+            }
+
+            .eyebrow::before { width: 45px; }
+
+            .hero h1 {
+                font-size: clamp(47px, 14vw, 70px);
+                letter-spacing: -3px;
+            }
+
+            .intro { font-size: 16px; }
+
+            .highlights {
                 grid-template-columns: 1fr;
-                text-align: center;
+                gap: 17px;
+                margin-top: 32px;
             }
 
-            .creator-photo {
-                margin: 0 auto;
+            .highlight,
+            .highlight:first-child {
+                padding: 0 0 17px;
+                border-right: 0;
+                border-bottom: 1px solid #d9dde2;
             }
 
-            .workflow {
-                justify-content: center;
+            .highlight:last-child {
+                border-bottom: 0;
+                padding-bottom: 0;
             }
 
-            .arrow {
-                display: none;
+            .portrait-area { min-height: 500px; }
+
+            .portrait {
+                width: 100%;
+                max-height: 520px;
             }
+
+            .portrait-bg {
+                width: 340px;
+                height: 340px;
+                top: 17%;
+            }
+
+            .signature {
+                right: 0;
+                top: 7%;
+                width: 190px;
+            }
+
+            .signature-role {
+                margin-top: 2px;
+                font-size: 11px;
+            }
+
+
+
+
+            .content { padding: 55px 6vw; }
+
+            .card { padding: 22px; }
+
+            .features { grid-template-columns: 1fr; }
+
+            .workflow { justify-content: center; }
+            .arrow { display: none; }
         }
     </style>
 </head>
 
 <body>
+<div class="page">
 
-<header>
-    <div class="container">
-        <div class="hero-badge">AI-Powered Learning Platform</div>
-
-        <h1 class="brand">StudyFree05</h1>
-        <p class="creator-intro">
-            Created and developed by <strong>SANGAPU YASHWANTH</strong>
-        </p>
-
-
-        <p class="tagline">
-            Turning educational videos into active learning.
-        </p>
+    <div class="brand">
+        <h2>StudyFree<span>05</span></h2>
+        <p>Learn &nbsp; | &nbsp; Practice &nbsp; | &nbsp; Grow</p>
     </div>
-</header>
 
-<main>
+    <main>
+        <section class="hero" aria-labelledby="creator-heading">
+            <div class="hero-copy">
+                <div class="eyebrow">Creator &amp; Developer</div>
 
-    <section>
-        <div class="container">
-            <h2 class="section-title">What is StudyFree05?</h2>
+                <h1 id="creator-heading">
+                    Hi, I'm<br>
+                    Sangapu<br>
+                    <span class="gold">Yashwanth.</span>
+                </h1>
 
-            <div class="card">
-                <p class="section-text">
-                    StudyFree05 is an AI-powered learning platform designed
-                    to transform educational YouTube videos into interactive
-                    and effective learning experiences.
+                <p class="intro">
+                    I'm the creator and developer of StudyFree05, a platform
+                    that uses AI to turn YouTube videos into interactive
+                    quizzes and make learning simple, free, and accessible
+                    for everyone.
                 </p>
 
-                <br>
-
-                <p class="section-text">
-                    Instead of simply watching an educational video, students
-                    can use StudyFree05 to understand the lesson, practice
-                    questions, evaluate their knowledge and receive
-                    learning-focused feedback.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="container">
-            <h2 class="section-title">What Problem Does StudyFree05 Solve?</h2>
-
-            <div class="card">
-                <p class="section-text">
-                    Students often watch educational videos passively without
-                    knowing how well they understood the lesson. StudyFree05
-                    turns passive video watching into active learning by
-                    converting educational content into structured questions
-                    and learning support.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="container">
-            <h2 class="section-title">How StudyFree05 Works</h2>
-
-            <div class="card">
-                <p class="section-text">
-                    StudyFree05 follows a structured YouTube-to-learning
-                    workflow:
-                </p>
-
-                <div class="workflow">
-                    <span>YouTube Video</span>
-                    <b class="arrow">→</b>
-                    <span>Transcript</span>
-                    <b class="arrow">→</b>
-                    <span>AI Understanding</span>
-                    <b class="arrow">→</b>
-                    <span>Whole-Video Analysis</span>
-                    <b class="arrow">→</b>
-                    <span>Question Generation</span>
-                    <b class="arrow">→</b>
-                    <span>Validation</span>
-                    <b class="arrow">→</b>
-                    <span>Quiz</span>
-                    <b class="arrow">→</b>
-                    <span>Evaluation</span>
-                    <b class="arrow">→</b>
-                    <span>Feedback</span>
-                    <b class="arrow">→</b>
-                    <span>Results</span>
+                <div class="highlights">
+                    <div class="highlight">
+                        <div class="icon">📖</div>
+                        <strong>Learn from<br>Real Videos</strong>
+                    </div>
+                    <div class="highlight">
+                        <div class="icon">🧠</div>
+                        <strong>AI-Powered<br>Learning</strong>
+                    </div>
+                    <div class="highlight">
+                        <div class="icon">▥</div>
+                        <strong>Accessible<br>for Everyone</strong>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section>
-        <div class="container">
-            <h2 class="section-title">Present Features</h2>
+            <div class="portrait-area">
+                <div class="portrait-bg" aria-hidden="true"></div>
 
-            <div class="features">
+                <img
+                    class="portrait"
+                    src="/static/images/yashwanth.jpg"
+                    alt="SANGAPU YASHWANTH, Creator and Developer of StudyFree05"
+                >
 
-                <article class="feature">
-                    <h3>YouTube-to-Quiz</h3>
-                    <p>Converts educational YouTube videos into interactive quizzes.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Transcript-Based Learning</h3>
-                    <p>Processes the video's transcript to understand the lesson content.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>AI-Powered Question Generation</h3>
-                    <p>Creates questions based on the educational content.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>MCQ Generation</h3>
-                    <p>Generates multiple-choice questions with four answer options.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Short Answer Questions</h3>
-                    <p>Tests students' ability to provide concise answers.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Long Answer Questions</h3>
-                    <p>Tests deeper understanding and explanation.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Whole-Video Coverage</h3>
-                    <p>Generates questions from different regions of the entire video.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Balanced Question Distribution</h3>
-                    <p>Distributes questions across different parts of the lesson.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Memory Tricks</h3>
-                    <p>Provides easy-to-remember techniques to help students recall important concepts.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Real-Life Examples</h3>
-                    <p>Connects concepts with practical, everyday examples to make difficult topics easier to understand.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Exam Tips</h3>
-                    <p>Highlights useful exam-focused points, approaches and important things to remember.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Easy Concept Explanations</h3>
-                    <p>Helps make difficult concepts easier to understand.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Important Points</h3>
-                    <p>Identifies key information students should focus on.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Evidence-Based Questions</h3>
-                    <p>Grounds generated questions in educational content from the video.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Question Validation</h3>
-                    <p>Checks generated questions for structure, answers, evidence and video-region coverage.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Answer Evaluation</h3>
-                    <p>Evaluates written answers to help students understand their performance.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Learning Feedback</h3>
-                    <p>Provides feedback to help students identify areas for improvement.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Scoring and Results</h3>
-                    <p>Provides quiz scores and results after completing the quiz.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Interactive Learning Flow</h3>
-                    <p>Students answer questions step by step instead of only watching a video.</p>
-                </article>
-
-                <article class="feature">
-                    <h3>Structured Learning</h3>
-                    <p>Brings explanation, practice, evaluation and feedback together in one learning experience.</p>
-                </article>
-
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="container">
-            <h2 class="section-title">The StudyFree05 Learning Experience</h2>
-
-            <div class="card">
-                <p class="section-text">
-                    StudyFree05 combines educational video content with
-                    AI-assisted learning, practice, evaluation and feedback.
-                </p>
-
-                <br>
-
-                <p class="section-text">
-                    The goal is to help students move from passive watching
-                    to active, structured and measurable learning.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section>
-        <div class="container">
-            <h2 class="section-title">Meet the Creator</h2>
-
-            <div class="creator">
-
-                <div class="creator-photo">
+                <div class="signature" aria-hidden="true">
                     <img
-                        src="/static/images/yashwanth.jpg"
-                        alt="SANGAPU YASHWANTH — Creator and Developer of StudyFree05"
+                        class="signature-image"
+                        src="data:image/png;base64,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"
+                        alt=""
                     >
+                    <div class="signature-role">
+                        Creator &amp; Developer<br>of StudyFree05
+                    </div>
+                </div>
+                    <div class="signature-line"></div>
+                    <div class="signature-role">
+                        Creator &amp; Developer<br>of StudyFree05
+                    </div>
                 </div>
 
-                <div>
-                    <h3 class="creator-name">SANGAPU YASHWANTH</h3>
-
-                    <p class="creator-role">
-                        Creator &amp; Developer of StudyFree05
-                    </p>
-
-                    <p class="creator-description">
-                        SANGAPU YASHWANTH is the creator and developer of StudyFree05,
-                        an independently developed AI-powered learning platform that
-                        transforms educational YouTube videos into structured,
-                        interactive learning experiences.
-                    </p>
+                    <div class="signature-line"></div>
+                    <div class="signature-role">
+                        Creator &amp; Developer<br>of StudyFree05
+                    </div>
                 </div>
 
             </div>
+        </section>
 
-            <div class="project-box">
-                <p>
-                    <strong>Project:</strong> StudyFree05
-                </p>
+        <div class="content">
 
-                <p>
-                    <strong>Website:</strong> studyfree05.com
-                </p>
-            </div>
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">What is StudyFree05?</h2>
+                    <div class="card">
+                        <p class="text">
+                            StudyFree05 is an AI-powered learning platform designed
+                            to transform educational YouTube videos into interactive
+                            and effective learning experiences.
+                        </p>
+                        <br>
+                        <p class="text">
+                            Instead of simply watching an educational video, students
+                            can use StudyFree05 to understand the lesson, practice
+                            questions, evaluate their knowledge and receive
+                            learning-focused feedback.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">What Problem Does StudyFree05 Solve?</h2>
+                    <div class="card">
+                        <p class="text">
+                            Students often watch educational videos passively without
+                            knowing how well they understood the lesson. StudyFree05
+                            turns passive video watching into active learning by
+                            converting educational content into structured questions
+                            and learning support.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">How StudyFree05 Works</h2>
+                    <div class="card">
+                        <p class="text">
+                            StudyFree05 follows a structured YouTube-to-learning workflow:
+                        </p>
+                        <div class="workflow">
+                            <span>YouTube Video</span><b class="arrow">→</b>
+                            <span>Transcript</span><b class="arrow">→</b>
+                            <span>AI Understanding</span><b class="arrow">→</b>
+                            <span>Whole-Video Analysis</span><b class="arrow">→</b>
+                            <span>Question Generation</span><b class="arrow">→</b>
+                            <span>Validation</span><b class="arrow">→</b>
+                            <span>Quiz</span><b class="arrow">→</b>
+                            <span>Evaluation</span><b class="arrow">→</b>
+                            <span>Feedback</span><b class="arrow">→</b>
+                            <span>Results</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">Present Features</h2>
+                    <div class="features">
+                        <article class="feature"><h3>YouTube-to-Quiz</h3><p>Converts educational YouTube videos into interactive quizzes.</p></article>
+                        <article class="feature"><h3>Transcript-Based Learning</h3><p>Processes the video's transcript to understand the lesson content.</p></article>
+                        <article class="feature"><h3>AI-Powered Question Generation</h3><p>Creates questions based on the educational content.</p></article>
+                        <article class="feature"><h3>MCQ Generation</h3><p>Generates multiple-choice questions with four answer options.</p></article>
+                        <article class="feature"><h3>Short Answer Questions</h3><p>Tests students' ability to provide concise answers.</p></article>
+                        <article class="feature"><h3>Long Answer Questions</h3><p>Tests deeper understanding and explanation.</p></article>
+                        <article class="feature"><h3>Whole-Video Coverage</h3><p>Generates questions from different regions of the entire video.</p></article>
+                        <article class="feature"><h3>Balanced Question Distribution</h3><p>Distributes questions across different parts of the lesson.</p></article>
+                        <article class="feature"><h3>Memory Tricks</h3><p>Provides easy-to-remember techniques to help students recall important concepts.</p></article>
+                        <article class="feature"><h3>Real-Life Examples</h3><p>Connects concepts with practical, everyday examples to make difficult topics easier to understand.</p></article>
+                        <article class="feature"><h3>Exam Tips</h3><p>Highlights useful exam-focused points, approaches and important things to remember.</p></article>
+                        <article class="feature"><h3>Easy Concept Explanations</h3><p>Helps make difficult concepts easier to understand.</p></article>
+                        <article class="feature"><h3>Important Points</h3><p>Identifies key information students should focus on.</p></article>
+                        <article class="feature"><h3>Evidence-Based Questions</h3><p>Grounds generated questions in educational content from the video.</p></article>
+                        <article class="feature"><h3>Question Validation</h3><p>Checks generated questions for structure, answers, evidence and video-region coverage.</p></article>
+                        <article class="feature"><h3>Answer Evaluation</h3><p>Evaluates written answers to help students understand their performance.</p></article>
+                        <article class="feature"><h3>Learning Feedback</h3><p>Provides feedback to help students identify areas for improvement.</p></article>
+                        <article class="feature"><h3>Scoring and Results</h3><p>Provides quiz scores and results after completing the quiz.</p></article>
+                        <article class="feature"><h3>Interactive Learning Flow</h3><p>Students answer questions step by step instead of only watching a video.</p></article>
+                        <article class="feature"><h3>Structured Learning</h3><p>Brings explanation, practice, evaluation and feedback together in one learning experience.</p></article>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">The StudyFree05 Learning Experience</h2>
+                    <div class="card">
+                        <p class="text">
+                            StudyFree05 combines educational video content with
+                            AI-assisted learning, practice, evaluation and feedback.
+                        </p>
+                        <br>
+                        <p class="text">
+                            The goal is to help students move from passive watching
+                            to active, structured and measurable learning.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">Meet the Creator</h2>
+
+                    <div class="creator">
+                        <div>
+                            <h3 class="creator-name">SANGAPU YASHWANTH</h3>
+                            <p class="creator-role">Creator &amp; Developer of StudyFree05</p>
+                            <p class="text">
+                                SANGAPU YASHWANTH is the creator and developer of StudyFree05,
+                                an independently developed AI-powered learning platform that
+                                transforms educational YouTube videos into structured,
+                                interactive learning experiences.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="project-box">
+                        <p><strong>Project:</strong> StudyFree05</p>
+                        <p><strong>Website:</strong> studyfree05.com</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">About the Project</h2>
+                    <div class="card">
+                        <p class="text">
+                            StudyFree05 is an independently developed educational
+                            technology project focused on making video-based learning
+                            more interactive, active, structured and useful for
+                            students.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
         </div>
-    </section>
+    </main>
 
-    <section>
-        <div class="container">
-            <h2 class="section-title">About the Project</h2>
-
-            <div class="card">
-                <p class="section-text">
-                    StudyFree05 is an independently developed educational
-                    technology project focused on making video-based learning
-                    more interactive, active, structured and useful for
-                    students.
-                </p>
-            </div>
-        </div>
-    </section>
-
-</main>
-
-<footer>
-    <div class="container">
+    <footer>
         StudyFree05 — AI-Powered Learning Platform
-    </div>
-</footer>
-
+    </footer>
+</div>
 </body>
 </html>
