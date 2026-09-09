@@ -1041,6 +1041,52 @@ body {
     color: #58a6ff;
 }
 
+/* =========================================================
+   ABOUT BUTTON
+========================================================= */
+
+.top-nav {
+    position: fixed;
+    top: 20px;
+    right: 28px;
+    z-index: 10000;
+}
+
+.about-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 105px;
+    height: 54px;
+
+    color: #f0f6fc;
+    background: rgba(13, 17, 23, 0.88);
+
+    border: 1px solid #58a6ff;
+    border-radius: 16px;
+
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+
+    text-decoration: none;
+
+    box-shadow: 0 0 18px rgba(88, 166, 255, 0.18);
+
+    backdrop-filter: blur(8px);
+
+    transition: all 0.25s ease;
+}
+
+.about-link:hover {
+    color: #ffffff;
+    background: rgba(31, 111, 235, 0.18);
+    border-color: #69b1ff;
+    box-shadow: 0 0 28px rgba(88, 166, 255, 0.35);
+    transform: translateY(-2px);
+}
+
 </style>
 
 </head>
@@ -1048,30 +1094,37 @@ body {
 
 <body>
 
+<nav class="top-nav">
+    <a href="{{ url_for('about') }}" class="about-link">About</a>
+</nav>
+
+<main class="hero">
+
+    <div class="logo">
+        🤖
+    </div>
+
+    <h1>
+        StudyFree05 AI
+    </h1>
 
 <!-- =====================================================
      HOME
 ===================================================== -->
 
-<main class="hero">
 
 
-<div class="logo">
-🤖
-</div>
 
-
-<h1>
-StudyFree05 AI
-</h1>
 
 
 <p class="subtitle">
 
-Generate AI-powered quizzes from educational YouTube videos
-and test your understanding across the whole lesson.
+    Generate AI-powered quizzes from educational YouTube videos
+    and test your understanding across the whole lesson.
 
 </p>
+
+
 
 
 <section class="main-box">
@@ -1967,6 +2020,9 @@ is complete.
 
 
 })();
+
+
+
 
 </script>
 
