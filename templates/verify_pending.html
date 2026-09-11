@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify Your Email — StudyFree05</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Arial,sans-serif;background:#f7f8fa;color:#15171b}
+.card{width:min(520px,92%);background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:42px;box-shadow:0 18px 50px rgba(0,0,0,.08);text-align:center}
+.icon{font-size:52px}.brand{font-weight:900;font-size:28px;margin:10px 0}.sub{color:#69707d;line-height:1.6}
+.email{font-weight:900;margin:18px 0}.link{display:inline-block;margin-top:22px;padding:13px 18px;border-radius:11px;background:#f4bf00;color:#111;text-decoration:none;font-weight:900}
+</style>
+</head>
+<body><div class="card">
+<div class="icon">📧</div><div class="brand">Check your email</div>
+<p class="sub">We sent a verification link to:</p>
+<div class="email">{{ email }}</div>
+<p class="sub">Open the email and click the verification link. The link expires in 30 minutes.</p>
+<a class="link" href="{{ url_for('login') }}">Go to Login</a>
+</div></body>
+</html>

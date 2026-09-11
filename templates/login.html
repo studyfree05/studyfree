@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — StudyFree05</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Arial,sans-serif;background:#f7f8fa;color:#15171b}
+.card{width:min(460px,92%);background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:38px;box-shadow:0 18px 50px rgba(0,0,0,.08)}
+.brand{font-weight:900;font-size:28px;margin-bottom:8px}.sub{color:#69707d;margin-bottom:28px}
+label{display:block;font-weight:700;margin:16px 0 7px}input{width:100%;padding:14px 15px;border:1px solid #d8dce3;border-radius:12px;font-size:16px}
+.password-wrap{position:relative}.password-wrap input{padding-right:78px}.toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#4b5563;font-weight:700;cursor:pointer;padding:6px}
+button.submit{width:100%;margin-top:24px;padding:15px;border:0;border-radius:12px;background:#f4bf00;color:#111;font-weight:900;font-size:16px;cursor:pointer}
+.error{padding:12px;border-radius:10px;background:#fff0f0;color:#b42318;margin-bottom:16px}.forgot{text-align:right;margin-top:9px}.forgot a,.bottom a{color:#111;font-weight:800}.bottom{text-align:center;margin-top:20px;color:#69707d}
+</style>
+</head>
+<body>
+<div class="card">
+<div class="brand">StudyFree05</div>
+<div class="sub">Log in to continue learning.</div>
+{% if error %}<div class="error">{{ error }}</div>{% endif %}
+<form method="POST">
+<label for="email">Email</label>
+<input id="email" name="email" type="email" autocomplete="email" required>
+<label for="password">Password</label>
+<div class="password-wrap">
+<input id="password" name="password" type="password" autocomplete="current-password" required>
+<button class="toggle" type="button" onclick="togglePassword('password', this)">Show</button>
+</div>
+<div class="forgot"><a href="{{ url_for('forgot_password') }}">Forgot password?</a></div>
+<button class="submit" type="submit">Log In</button>
+</form>
+<div class="bottom">New to StudyFree05? <a href="{{ url_for('register') }}">Create an account</a></div>
+</div>
+<script>
+function togglePassword(id, button){const input=document.getElementById(id);const show=input.type==='password';input.type=show?'text':'password';button.textContent=show?'Hide':'Show';}
+</script>
+</body>
+</html>

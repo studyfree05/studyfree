@@ -14,6 +14,7 @@ from flask import (
 )
 
 from flask_session import Session
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from services.scorer import (
     score_mcq,
@@ -39,6 +40,11 @@ import os
 import tempfile
 
 import random
+import sqlite3
+import secrets
+import smtplib
+from email.message import EmailMessage
+from datetime import datetime, timedelta, timezone
 
 from utils.pdf_report import generate_pdf
 
@@ -74,6 +80,542 @@ app.config["SESSION_COOKIE_SECURE"] = True
 app.config["SESSION_COOKIE_PATH"] = "/"
 
 Session(app)
+
+# ==========================================================
+# USER ACCOUNTS + EMAIL OTP VERIFICATION
+# ==========================================================
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATABASE_PATH = os.path.join(BASE_DIR, "studyfree_users.db")
+
+MAIL_HOST = os.environ.get("STUDYFREE_MAIL_HOST", "smtp.gmail.com")
+MAIL_PORT = int(os.environ.get("STUDYFREE_MAIL_PORT", "587"))
+MAIL_USERNAME = os.environ.get("STUDYFREE_MAIL_USERNAME", "")
+MAIL_PASSWORD = os.environ.get("STUDYFREE_MAIL_PASSWORD", "")
+MAIL_FROM = os.environ.get("STUDYFREE_MAIL_FROM", MAIL_USERNAME)
+
+
+def get_db():
+    db = sqlite3.connect(DATABASE_PATH)
+    db.row_factory = sqlite3.Row
+    return db
+
+
+def init_user_db():
+    db = get_db()
+    db.execute(
+        """
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            full_name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            email_verified INTEGER NOT NULL DEFAULT 0,
+            verification_otp TEXT,
+            verification_otp_expires TEXT,
+            verification_attempts INTEGER NOT NULL DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """
+    )
+    db.commit()
+    db.close()
+
+
+def upgrade_user_db():
+    db = get_db()
+    columns = {row["name"] for row in db.execute("PRAGMA table_info(users)").fetchall()}
+
+    if not columns:
+        db.close()
+        init_user_db()
+        return
+
+    if "email_verified" not in columns:
+        db.execute("ALTER TABLE users ADD COLUMN email_verified INTEGER NOT NULL DEFAULT 0")
+    if "verification_otp" not in columns:
+        db.execute("ALTER TABLE users ADD COLUMN verification_otp TEXT")
+    if "verification_otp_expires" not in columns:
+        db.execute("ALTER TABLE users ADD COLUMN verification_otp_expires TEXT")
+    if "verification_attempts" not in columns:
+        db.execute("ALTER TABLE users ADD COLUMN verification_attempts INTEGER NOT NULL DEFAULT 0")
+
+    db.commit()
+    db.close()
+
+
+def send_verification_email(email, full_name, otp):
+    if not MAIL_USERNAME or not MAIL_PASSWORD or not MAIL_FROM:
+        raise RuntimeError(
+            "Email is not configured. Set STUDYFREE_MAIL_USERNAME, "
+            "STUDYFREE_MAIL_PASSWORD and STUDYFREE_MAIL_FROM."
+        )
+
+    message = EmailMessage()
+    message["Subject"] = "Your StudyFree05 verification code"
+    message["From"] = MAIL_FROM
+    message["To"] = email
+    message.set_content(
+        f"""Hi {full_name},
+
+Welcome to StudyFree05!
+
+Your 6-digit email verification code is:
+
+{otp}
+
+This code expires in 10 minutes.
+
+If you did not create this account, you can ignore this email.
+
+StudyFree05
+"""
+    )
+
+    with smtplib.SMTP(MAIL_HOST, MAIL_PORT, timeout=20) as server:
+        server.starttls()
+        server.login(MAIL_USERNAME, MAIL_PASSWORD)
+        server.send_message(message)
+
+
+def send_password_reset_email(email, full_name, otp):
+    if not MAIL_USERNAME or not MAIL_PASSWORD or not MAIL_FROM:
+        raise RuntimeError(
+            "Email is not configured. Set STUDYFREE_MAIL_USERNAME, "
+            "STUDYFREE_MAIL_PASSWORD and STUDYFREE_MAIL_FROM."
+        )
+
+    message = EmailMessage()
+    message["Subject"] = "Your StudyFree05 password reset code"
+    message["From"] = MAIL_FROM
+    message["To"] = email
+    message.set_content(
+        f"""Hi {full_name},
+
+We received a request to reset your StudyFree05 password.
+
+Your 6-digit password reset code is:
+
+{otp}
+
+This code expires in 10 minutes.
+
+If you did not request a password reset, you can ignore this email.
+
+StudyFree05
+"""
+    )
+
+    with smtplib.SMTP(MAIL_HOST, MAIL_PORT, timeout=20) as server:
+        server.starttls()
+        server.login(MAIL_USERNAME, MAIL_PASSWORD)
+        server.send_message(message)
+
+
+def current_user():
+    user_id = session.get("user_id")
+    if not user_id:
+        return None
+
+    db = get_db()
+    user = db.execute(
+        """
+        SELECT id, full_name, email, created_at, email_verified
+        FROM users WHERE id = ?
+        """,
+        (user_id,),
+    ).fetchone()
+    db.close()
+    return user
+
+
+init_user_db()
+upgrade_user_db()
+
+
+# ==========================================================
+# AUTHENTICATION
+# ==========================================================
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if session.get("user_id"):
+        return redirect(url_for("dashboard"))
+
+    error = None
+
+    if request.method == "POST":
+        full_name = request.form.get("full_name", "").strip()
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        if not full_name or not email or not password or not confirm_password:
+            error = "Please fill in all fields."
+        elif "@" not in email or "." not in email.rsplit("@", 1)[-1]:
+            error = "Please enter a valid email address."
+        elif len(password) < 8:
+            error = "Password must be at least 8 characters."
+        elif password != confirm_password:
+            error = "Passwords do not match."
+        else:
+            db = get_db()
+            existing = db.execute(
+                "SELECT id FROM users WHERE email = ?", (email,)
+            ).fetchone()
+
+            if existing:
+                db.close()
+                error = "An account with this email already exists."
+            else:
+                otp = f"{secrets.randbelow(1000000):06d}"
+                expires = (
+                    datetime.now(timezone.utc) + timedelta(minutes=10)
+                ).isoformat()
+
+                cursor = db.execute(
+                    """
+                    INSERT INTO users
+                    (full_name, email, password_hash, email_verified,
+                     verification_otp, verification_otp_expires, verification_attempts)
+                    VALUES (?, ?, ?, 0, ?, ?, 0)
+                    """,
+                    (
+                        full_name,
+                        email,
+                        generate_password_hash(password),
+                        otp,
+                        expires,
+                    ),
+                )
+                db.commit()
+                user_id = cursor.lastrowid
+                db.close()
+
+                try:
+                    send_verification_email(email, full_name, otp)
+                except Exception as exc:
+                    print(f"Verification email error: {exc}")
+                    db = get_db()
+                    db.execute("DELETE FROM users WHERE id = ?", (user_id,))
+                    db.commit()
+                    db.close()
+                    error = "We couldn't send the verification email. Please try again."
+                else:
+                    session["pending_verification_email"] = email
+                    return redirect(url_for("verify_otp"))
+
+    return render_template("register.html", error=error)
+
+
+@app.route("/verify-otp", methods=["GET", "POST"])
+def verify_otp():
+    email = session.get("pending_verification_email")
+    if not email:
+        return redirect(url_for("register"))
+
+    error = None
+
+    if request.method == "POST":
+        otp = request.form.get("otp", "").strip()
+
+        if not otp.isdigit() or len(otp) != 6:
+            error = "Enter the 6-digit verification code."
+        else:
+            db = get_db()
+            user = db.execute(
+                """
+                SELECT id, full_name, email, email_verified, verification_otp,
+                       verification_otp_expires, verification_attempts
+                FROM users WHERE email = ?
+                """,
+                (email,),
+            ).fetchone()
+
+            if not user:
+                db.close()
+                error = "Account not found. Please register again."
+            elif user["email_verified"]:
+                db.close()
+                session.pop("pending_verification_email", None)
+                return redirect(url_for("login"))
+            elif user["verification_attempts"] >= 5:
+                db.close()
+                error = "Too many incorrect attempts. Please use Resend Code."
+            else:
+                try:
+                    expires = datetime.fromisoformat(user["verification_otp_expires"])
+                except (TypeError, ValueError):
+                    expires = datetime.min.replace(tzinfo=timezone.utc)
+
+                if expires < datetime.now(timezone.utc):
+                    db.close()
+                    error = "This code has expired. Please use Resend Code."
+                elif otp != user["verification_otp"]:
+                    db.execute(
+                        "UPDATE users SET verification_attempts = verification_attempts + 1 WHERE id = ?",
+                        (user["id"],),
+                    )
+                    db.commit()
+                    db.close()
+                    error = "Incorrect verification code."
+                else:
+                    db.execute(
+                        """
+                        UPDATE users
+                        SET email_verified = 1,
+                            verification_otp = NULL,
+                            verification_otp_expires = NULL,
+                            verification_attempts = 0
+                        WHERE id = ?
+                        """,
+                        (user["id"],),
+                    )
+                    db.commit()
+                    db.close()
+                    session.pop("pending_verification_email", None)
+                    session["user_id"] = user["id"]
+                    session["user_name"] = user["full_name"]
+                    return redirect(url_for("ai_quiz"))
+
+    return render_template("verify_otp.html", email=email, error=error)
+
+
+@app.route("/resend-verification", methods=["POST"])
+def resend_verification():
+    email = session.get("pending_verification_email")
+    if not email:
+        return redirect(url_for("register"))
+
+    db = get_db()
+    user = db.execute(
+        "SELECT id, full_name, email_verified FROM users WHERE email = ?",
+        (email,),
+    ).fetchone()
+
+    if not user:
+        db.close()
+        return redirect(url_for("register"))
+
+    if user["email_verified"]:
+        db.close()
+        session.pop("pending_verification_email", None)
+        return redirect(url_for("login"))
+
+    otp = f"{secrets.randbelow(1000000):06d}"
+    expires = (
+        datetime.now(timezone.utc) + timedelta(minutes=10)
+    ).isoformat()
+
+    db.execute(
+        """
+        UPDATE users
+        SET verification_otp = ?,
+            verification_otp_expires = ?,
+            verification_attempts = 0
+        WHERE id = ?
+        """,
+        (otp, expires, user["id"]),
+    )
+    db.commit()
+    db.close()
+
+    try:
+        send_verification_email(email, user["full_name"], otp)
+    except Exception as exc:
+        print(f"Resend verification email error: {exc}")
+        return render_template(
+            "verify_otp.html",
+            email=email,
+            error="We couldn't resend the code. Please try again.",
+        )
+
+    return render_template(
+        "verify_otp.html",
+        email=email,
+        error="A new verification code has been sent.",
+    )
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if session.get("user_id"):
+        return redirect(url_for("dashboard"))
+
+    error = None
+
+    if request.method == "POST":
+        email = request.form.get("email", "").strip().lower()
+        password = request.form.get("password", "")
+
+        db = get_db()
+        user = db.execute(
+            """
+            SELECT id, full_name, email, password_hash, email_verified
+            FROM users WHERE email = ?
+            """,
+            (email,),
+        ).fetchone()
+        db.close()
+
+        if not user or not check_password_hash(user["password_hash"], password):
+            error = "Incorrect email or password."
+        elif not user["email_verified"]:
+            session["pending_verification_email"] = email
+            error = "Please verify your email before logging in."
+        else:
+            session.clear()
+            session["user_id"] = user["id"]
+            session["user_name"] = user["full_name"]
+            return redirect(url_for("ai_quiz"))
+
+    return render_template("login.html", error=error)
+
+
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    if session.get("user_id"):
+        return redirect(url_for("ai_quiz"))
+
+    error = None
+
+    if request.method == "POST":
+        email = request.form.get("email", "").strip().lower()
+
+        if not email:
+            error = "Please enter your email address."
+        else:
+            db = get_db()
+            user = db.execute(
+                "SELECT id, full_name, email FROM users WHERE email = ?",
+                (email,),
+            ).fetchone()
+
+            if not user:
+                db.close()
+                error = "No account was found with that email address."
+            else:
+                otp = f"{secrets.randbelow(1000000):06d}"
+                expires = (
+                    datetime.now(timezone.utc) + timedelta(minutes=10)
+                ).isoformat()
+
+                db.execute(
+                    """
+                    UPDATE users
+                    SET verification_otp = ?,
+                        verification_otp_expires = ?,
+                        verification_attempts = 0
+                    WHERE id = ?
+                    """,
+                    (otp, expires, user["id"]),
+                )
+                db.commit()
+                db.close()
+
+                try:
+                    send_password_reset_email(
+                        user["email"], user["full_name"], otp
+                    )
+                except Exception as exc:
+                    print(f"Password reset email error: {exc}")
+                    error = "We couldn't send the reset code. Please try again."
+                else:
+                    session["password_reset_email"] = email
+                    return redirect(url_for("reset_password"))
+
+    return render_template("forgot_password.html", error=error)
+
+
+@app.route("/reset-password", methods=["GET", "POST"])
+def reset_password():
+    email = session.get("password_reset_email")
+    if not email:
+        return redirect(url_for("forgot_password"))
+
+    error = None
+
+    if request.method == "POST":
+        otp = request.form.get("otp", "").strip()
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        if not otp.isdigit() or len(otp) != 6:
+            error = "Enter the 6-digit reset code."
+        elif len(password) < 8:
+            error = "Password must be at least 8 characters."
+        elif password != confirm_password:
+            error = "Passwords do not match."
+        else:
+            db = get_db()
+            user = db.execute(
+                """
+                SELECT id, verification_otp, verification_otp_expires,
+                       verification_attempts
+                FROM users WHERE email = ?
+                """,
+                (email,),
+            ).fetchone()
+
+            if not user:
+                db.close()
+                error = "Account not found."
+            elif user["verification_attempts"] >= 5:
+                db.close()
+                error = "Too many incorrect attempts. Please request a new code."
+            else:
+                try:
+                    expires = datetime.fromisoformat(user["verification_otp_expires"])
+                except (TypeError, ValueError):
+                    expires = datetime.min.replace(tzinfo=timezone.utc)
+
+                if expires < datetime.now(timezone.utc):
+                    db.close()
+                    error = "This code has expired. Please request a new one."
+                elif otp != user["verification_otp"]:
+                    db.execute(
+                        "UPDATE users SET verification_attempts = verification_attempts + 1 WHERE id = ?",
+                        (user["id"],),
+                    )
+                    db.commit()
+                    db.close()
+                    error = "Incorrect reset code."
+                else:
+                    db.execute(
+                        """
+                        UPDATE users
+                        SET password_hash = ?,
+                            verification_otp = NULL,
+                            verification_otp_expires = NULL,
+                            verification_attempts = 0
+                        WHERE id = ?
+                        """,
+                        (generate_password_hash(password), user["id"]),
+                    )
+                    db.commit()
+                    db.close()
+                    session.pop("password_reset_email", None)
+                    return redirect(url_for("login"))
+
+    return render_template("reset_password.html", email=email, error=error)
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login"))
+
+
+@app.route("/dashboard")
+def dashboard():
+    user = current_user()
+    if not user:
+        return redirect(url_for("login"))
+    if not user["email_verified"]:
+        session.clear()
+        return redirect(url_for("login"))
+    return redirect(url_for("ai_quiz"))
+
 
 # ==========================================================
 # HOME
@@ -123,6 +665,10 @@ def sitemap():
     methods=["GET", "POST"],
 )
 def ai_quiz():
+
+    user = current_user()
+    if not user or not user["email_verified"]:
+        return redirect(url_for("login"))
 
     if request.method == "POST":
 
