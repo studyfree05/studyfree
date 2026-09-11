@@ -8,3 +8,4 @@ youtube-transcript-api==1.2.4
 openai==3.3.1
 google-genai==2.19.0
 json-repair==0.55.0
+resend==2.44.0
