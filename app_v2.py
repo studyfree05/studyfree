@@ -43,6 +43,7 @@ import random
 import sqlite3
 import secrets
 import smtplib
+import resend
 from email.message import EmailMessage
 from datetime import datetime, timedelta, timezone
 
@@ -145,71 +146,65 @@ def upgrade_user_db():
 
 
 def send_verification_email(email, full_name, otp):
-    if not MAIL_USERNAME or not MAIL_PASSWORD or not MAIL_FROM:
-        raise RuntimeError(
-            "Email is not configured. Set STUDYFREE_MAIL_USERNAME, "
-            "STUDYFREE_MAIL_PASSWORD and STUDYFREE_MAIL_FROM."
-        )
+    api_key = os.environ.get("RESEND_API_KEY")
+    from_email = os.environ.get("RESEND_FROM_EMAIL", "onboarding@resend.dev")
 
-    message = EmailMessage()
-    message["Subject"] = "Your StudyFree05 verification code"
-    message["From"] = MAIL_FROM
-    message["To"] = email
-    message.set_content(
-        f"""Hi {full_name},
+    if not api_key:
+        raise RuntimeError("RESEND_API_KEY is not configured.")
 
-Welcome to StudyFree05!
+    resend.api_key = api_key
 
-Your 6-digit email verification code is:
+    resend.Emails.send({
+        "from": from_email,
+        "to": [email],
+        "subject": "Your StudyFree05 verification code",
+        "html": f"""
+        <p>Hi {full_name},</p>
 
-{otp}
+        <p>Welcome to StudyFree05!</p>
 
-This code expires in 10 minutes.
+        <p>Your 6-digit email verification code is:</p>
 
-If you did not create this account, you can ignore this email.
+        <h2>{otp}</h2>
 
-StudyFree05
-"""
-    )
+        <p>This code expires in 10 minutes.</p>
 
-    with smtplib.SMTP(MAIL_HOST, MAIL_PORT, timeout=20) as server:
-        server.starttls()
-        server.login(MAIL_USERNAME, MAIL_PASSWORD)
-        server.send_message(message)
+        <p>If you did not create this account, you can ignore this email.</p>
+
+        <p>StudyFree05</p>
+        """
+    })
 
 
 def send_password_reset_email(email, full_name, otp):
-    if not MAIL_USERNAME or not MAIL_PASSWORD or not MAIL_FROM:
-        raise RuntimeError(
-            "Email is not configured. Set STUDYFREE_MAIL_USERNAME, "
-            "STUDYFREE_MAIL_PASSWORD and STUDYFREE_MAIL_FROM."
-        )
+    api_key = os.environ.get("RESEND_API_KEY")
+    from_email = os.environ.get("RESEND_FROM_EMAIL", "onboarding@resend.dev")
 
-    message = EmailMessage()
-    message["Subject"] = "Your StudyFree05 password reset code"
-    message["From"] = MAIL_FROM
-    message["To"] = email
-    message.set_content(
-        f"""Hi {full_name},
+    if not api_key:
+        raise RuntimeError("RESEND_API_KEY is not configured.")
 
-We received a request to reset your StudyFree05 password.
+    resend.api_key = api_key
 
-Your 6-digit password reset code is:
+    resend.Emails.send({
+        "from": from_email,
+        "to": [email],
+        "subject": "Your StudyFree05 password reset code",
+        "html": f"""
+        <p>Hi {full_name},</p>
 
-{otp}
+        <p>We received a request to reset your StudyFree05 password.</p>
 
-This code expires in 10 minutes.
+        <p>Your 6-digit password reset code is:</p>
 
-If you did not request a password reset, you can ignore this email.
+        <h2>{otp}</h2>
 
-StudyFree05
-"""
-    )
+        <p>This code expires in 10 minutes.</p>
 
-    with smtplib.SMTP(MAIL_HOST, MAIL_PORT, timeout=20) as server:
-        server.starttls()
-        server.login(MAIL_USERNAME, MAIL_PASSWORD)
-        server.send_message(message)
+        <p>If you did not request a password reset, you can ignore this email.</p>
+
+        <p>StudyFree05</p>
+        """
+    })
 
 
 def current_user():
