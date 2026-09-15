@@ -77,7 +77,7 @@ app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024
 app.config["SESSION_COOKIE_NAME"] = "studyfree_session"
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
-app.config["SESSION_COOKIE_SECURE"] = True
+app.config["SESSION_COOKIE_SECURE"] = False
 app.config["SESSION_COOKIE_PATH"] = "/"
 
 Session(app)
@@ -457,7 +457,7 @@ def login():
             error = "Incorrect email or password."
         elif not user["email_verified"]:
             session["pending_verification_email"] = email
-            error = "Please verify your email before logging in."
+            return redirect(url_for("resend_verification"))
         else:
             session.clear()
             session["user_id"] = user["id"]
