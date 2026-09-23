@@ -462,6 +462,7 @@ def login():
             session.clear()
             session["user_id"] = user["id"]
             session["user_name"] = user["full_name"]
+            print("LOGIN SESSION:", dict(session))
             return redirect(url_for("ai_quiz"))
 
     return render_template("login.html", error=error)
@@ -662,6 +663,7 @@ def sitemap():
 def ai_quiz():
 
     user = current_user()
+    print("AI QUIZ SESSION:", dict(session))
     if not user or not user["email_verified"]:
         return redirect(url_for("login"))
 
