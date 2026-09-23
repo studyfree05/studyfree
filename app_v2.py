@@ -376,7 +376,7 @@ def verify_otp():
     return render_template("verify_otp.html", email=email, error=error)
 
 
-@app.route("/resend-verification", methods=["POST"])
+@app.route("/resend-verification", methods=["GET", "POST"])
 def resend_verification():
     email = session.get("pending_verification_email")
     if not email:
